@@ -51,7 +51,6 @@ class RolltorApp(ctk.CTk):
             print(f"Hintergrundbild konnte nicht geladen werden: {e}")
             self.bg_photo = None
 
-
     def _setup_ui(self):
         # Padding (padx/pady) verringert, um den Rand zu minimieren
         self.canvas_frame = ctk.CTkFrame(self, corner_radius=10)
@@ -85,15 +84,13 @@ class RolltorApp(ctk.CTk):
 
         ctk.CTkLabel(self.control_frame, text="Endschalter (Sensoren)", font=("Arial", 16, "bold")).pack(pady=(20, 10))
 
-        self.btn_upper_limit = ctk.CTkButton(self.control_frame, text="Limit Oben (100%)", fg_color=COLOR_BTN_OFF)
+        self.btn_upper_limit = ctk.CTkButton(self.control_frame, text="Limit Oben (100%)", fg_color=COLOR_BTN_OFF,
+                                             command=self.toggle_manual_upper)
         self.btn_upper_limit.pack(pady=5, padx=20)
-        self.btn_upper_limit.bind("<ButtonPress-1>", lambda e: self.set_manual_upper(True))
-        self.btn_upper_limit.bind("<ButtonRelease-1>", lambda e: self.set_manual_upper(False))
 
-        self.btn_lower_limit = ctk.CTkButton(self.control_frame, text="Limit Unten (0%)", fg_color=COLOR_BTN_OFF)
+        self.btn_lower_limit = ctk.CTkButton(self.control_frame, text="Limit Unten (0%)", fg_color=COLOR_BTN_OFF,
+                                             command=self.toggle_manual_lower)
         self.btn_lower_limit.pack(pady=5, padx=20)
-        self.btn_lower_limit.bind("<ButtonPress-1>", lambda e: self.set_manual_lower(True))
-        self.btn_lower_limit.bind("<ButtonRelease-1>", lambda e: self.set_manual_lower(False))
 
         ctk.CTkLabel(self.control_frame, text="System", font=("Arial", 16, "bold")).pack(pady=(20, 10))
 
@@ -111,7 +108,7 @@ class RolltorApp(ctk.CTk):
                                     text_color="#00ff00")
         self.lbl_pos.pack(pady=(10, 10))
 
-    # --- TASTER-EVENTS ---
+    # --- MOTOR-EVENTS ---
     def set_motor_up(self, state):
         if not self.error:
             self.var_up.set(state)
@@ -120,11 +117,14 @@ class RolltorApp(ctk.CTk):
         if not self.error:
             self.var_down.set(state)
 
-    def set_manual_upper(self, state):
-        self.manual_upper_pressed = state
+    # --- TASTER-EVENTS (Now properly indented!) ---
+    def toggle_manual_upper(self):
+        # Kehrt den aktuellen Zustand um (True wird False, False wird True)
+        self.manual_upper_pressed = not self.manual_upper_pressed
 
-    def set_manual_lower(self, state):
-        self.manual_lower_pressed = state
+    def toggle_manual_lower(self):
+        # Kehrt den aktuellen Zustand um (Typo 'pressede' fixed!)
+        self.manual_lower_pressed = not self.manual_lower_pressed
 
     def _sync_buttons(self):
         self.btn_up.configure(fg_color=COLOR_BTN_ON if self.var_up.get() else COLOR_BTN_OFF)
@@ -137,6 +137,8 @@ class RolltorApp(ctk.CTk):
         self.error = False
         self.var_up.set(False)
         self.var_down.set(False)
+        self.manual_upper_pressed = False
+        self.manual_lower_pressed = False
         self.current_speed = 0.0
         self.pos = max(0.0, min(100.0, self.pos))
         self.lbl_error.configure(text="")
@@ -256,3 +258,4 @@ class RolltorApp(ctk.CTk):
 if __name__ == "__main__":
     app = RolltorApp()
     asyncio.run(app.async_mainloop())
+
