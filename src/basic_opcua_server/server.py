@@ -1,7 +1,7 @@
 import asyncio
 import logging
 from asyncua import Server, ua
-from src.roller_door.roller_door import RolltorApp
+from roller_door.roller_door import RolltorApp
 
 ENABLE_LOGGING = True
 if ENABLE_LOGGING:
@@ -11,20 +11,14 @@ else:
 
 _logger = logging.getLogger('asyncua')
 
-
 class SubHandler:
-    def __init__(self, tor: RolltorApp, up_var, down_var):
-        self.tor = tor
-        self.up_var = up_var
-        self.down_var = down_var
-
     def datachange_notification(self, node, val, data):
         _logger.info("OPC UA data change notification: %r %s", node, val)
-
-        if node == self.up_var:
-            self.tor.var_up.set(val)
-        elif node == self.down_var:
-            self.tor.var_down.set(val)
+        node_id = node.nodeid.Identifier
+        if "Motor_Up" in node_id:
+            tor.var_up.set(val)
+        elif "Motor_Down" in node_id:
+            tor.var_down.set(val)
 
     def event_notification(self, event):
         _logger.info("OPC UA event notification: %r", event)
@@ -51,14 +45,13 @@ async def run_opc_server(tor: RolltorApp):
     await up_var.set_writable()
     await down_var.set_writable()
 
-    handler = SubHandler(tor, up_var, down_var)
+    handler = SubHandler()
     sub = await server.create_subscription(500, handler)
     await sub.subscribe_data_change([up_var, down_var])
 
     _logger.info("Starting OPC UA Server at %s", server.endpoint.geturl())
 
     async with server:
-        # Loop strictly as long as the UI is running
         while tor.running:
             await pos_var.write_value(tor.pos)
             await error_var.write_value(tor.error)
@@ -68,29 +61,5 @@ async def run_opc_server(tor: RolltorApp):
             await lower_limit_var.write_value(tor.var_lower_limit.get())
             await asyncio.sleep(0.1)
 
-
-async def main():
-    # 1. Instanz der RolltorApp (UI) erstellen
-    tor = RolltorApp()
-
-    # 2. UI-Loop und unser erweitertes Steuerungs-Skript gleichzeitig starten
-    task_ui = asyncio.create_task(tor.async_mainloop())
-    task_opc = asyncio.create_task(run_opc_server(tor))
-
-    # 3. Ausführen, bis das Fenster (UI) geschlossen wird
-    await task_ui
-
-    # 4. OPC UA Server Task abbrechen, wenn das Fenster geschlossen wurde
-    _logger.info("UI closed, shutting down OPC UA server...")
-    task_opc.cancel()
-    try:
-        await task_opc
-    except asyncio.CancelledError:
-        pass
-
-
 if __name__ == "__main__":
-    _logger.info("Starting Rolltor application...")
-
-    # asyncio.run() startet den Event-Loop und führt die async main() Funktion aus
-    asyncio.run(main())
+    _logger.info("This script is not meant to be run directly. Run main.py instead.")

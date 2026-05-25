@@ -19,7 +19,7 @@ COLOR_BTN_ON = "#007a33"
 class RolltorApp(ctk.CTk):
     def __init__(self):
         super().__init__()
-        self.title("Rolltor Simulation (Mit Trägheit & Aussicht)")
+        self.title("Rollder Door Simulation")
         # Fenster vergrößert, um das breitere Tor aufzunehmen
         self.geometry("740x500")
         self.resizable(False, False)
@@ -43,7 +43,7 @@ class RolltorApp(ctk.CTk):
     def _load_background_image(self):
         """Lädt das Bild und skaliert es proportional auf den nun größeren Rahmen."""
         try:
-            img = Image.open("kyrgyzstan-info.jpg")
+            img = Image.open("assets/images/kyrgyzstan-info.jpg")
             # Das Bild wird jetzt breiter und höher zugeschnitten (680x600)
             img = ImageOps.fit(img, (780, 600), Image.Resampling.LANCZOS)
             self.bg_photo = ImageTk.PhotoImage(img)
