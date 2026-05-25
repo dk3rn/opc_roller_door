@@ -211,12 +211,6 @@ class RolltorApp(ctk.CTk):
         self.canvas.create_rectangle(x_left - rail_w, top_y, x_left, bottom_y, fill=COLOR_RAILS, outline="#111")
         self.canvas.create_rectangle(x_right, top_y, x_right + rail_w, bottom_y, fill=COLOR_RAILS, outline="#111")
 
-        # 2. Sensoren (Endschalter LEDs)
-        up_color = COLOR_LED_ON if self.var_upper_limit.get() else COLOR_LED_OFF
-        self.canvas.create_rectangle(x_left - rail_w - 15, top_y + 10, x_left - rail_w, top_y + 30, fill=up_color, outline="#111")
-
-        low_color = COLOR_LED_ON if self.var_lower_limit.get() else COLOR_LED_OFF
-        self.canvas.create_rectangle(x_left - rail_w - 15, bottom_y - 30, x_left - rail_w, bottom_y - 10, fill=low_color, outline="#111")
 
         # 3. Rolltor
         current_bottom_y = bottom_y - (bottom_y - top_y) * (self.pos / 100.0)
@@ -235,6 +229,13 @@ class RolltorApp(ctk.CTk):
 
             # 3.3 Abschlussleiste
             self.canvas.create_rectangle(x_left, current_bottom_y - 5, x_right, current_bottom_y, fill="#444", outline="")
+
+        # 2. Sensoren (Endschalter LEDs) - Sichtbar auf der linken Seite
+        up_color = COLOR_LED_ON if self.var_upper_limit.get() else COLOR_LED_OFF
+        self.canvas.create_rectangle(15, 40, 35, 60, fill=up_color, outline="#111")
+
+        low_color = COLOR_LED_ON if self.var_lower_limit.get() else COLOR_LED_OFF
+        self.canvas.create_rectangle(15, 620, 35, 600, fill=low_color, outline="#111")
 
         # 4. Motor / Gehäuse oben
         motor_powered = (self.var_up.get() or self.var_down.get()) and not self.error
