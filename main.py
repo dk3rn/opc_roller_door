@@ -5,7 +5,7 @@ import logging
 from asyncua import Server, Client, ua
 from src.roller_door.roller_door import RolltorApp
 
-ENABLE_LOGGING = True
+ENABLE_LOGGING = False
 if ENABLE_LOGGING:
     logging.basicConfig(level=logging.INFO)
 else:

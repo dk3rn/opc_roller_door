@@ -1,5 +1,5 @@
 {
-  "server_url": "opc.tcp://0.0.0.0:4840/th-koeln/opcua/",
+  "server_url": "opc.tcp://127.0.0.1:4840/th-koeln/opcua/",
   "nodes": {
     "Position": "ns=2;s=Position",
     "Error": "ns=2;s=Error",
