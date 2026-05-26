@@ -1,0 +1,11 @@
+{
+  "server_url": "opc.tcp://0.0.0.0:4840/th-koeln/opcua/",
+  "nodes": {
+    "Position": "ns=2;s=Position",
+    "Error": "ns=2;s=Error",
+    "Motor_Up": "ns=2;s=Motor_Up",
+    "Motor_Down": "ns=2;s=Motor_Down",
+    "Upper_Limit": "ns=2;s=Upper_Limit",
+    "Lower_Limit": "ns=2;s=Lower_Limit"
+  }
+}
