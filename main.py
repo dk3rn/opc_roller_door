@@ -5,9 +5,9 @@ import logging
 from asyncua import Server, Client, ua
 from src.roller_door.roller_door import RolltorApp
 
-ENABLE_LOGGING = False
+ENABLE_LOGGING = True
 if ENABLE_LOGGING:
-    logging.basicConfig(level=logging.INFO)
+    logging.basicConfig(level=logging.ERROR)
 else:
     logging.disable(logging.CRITICAL)
 
@@ -180,7 +180,7 @@ async def main():
         "-m", "--mode",
         type=str,
         choices=["server", "client", "both"],
-        default="both",
+        default="client",
         help="Choose whether to run as 'server', 'client', or 'both'."
     )
     args = parser.parse_args()
