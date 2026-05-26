@@ -19,8 +19,7 @@ COLOR_BTN_ON = "#007a33"
 class RolltorApp(ctk.CTk):
     def __init__(self):
         super().__init__()
-        self.title("Rollder Door Simulation")
-        # Fenster vergrößert, um das breitere Tor aufzunehmen
+        self.title("Roller Door Simulation")
         self.geometry("740x500")
         self.resizable(False, False)
         ctk.set_appearance_mode("Dark")
@@ -35,16 +34,13 @@ class RolltorApp(ctk.CTk):
         self.manual_upper_pressed = False
         self.manual_lower_pressed = False
 
-        # Bild laden, bevor das UI aufgebaut wird
         self._load_background_image()
         self._setup_ui()
         self.protocol("WM_DELETE_WINDOW", self._on_closing)
 
     def _load_background_image(self):
-        """Lädt das Bild und skaliert es proportional auf den nun größeren Rahmen."""
         try:
             img = Image.open("assets/images/kyrgyzstan-info.jpg")
-            # Das Bild wird jetzt breiter und höher zugeschnitten (680x600)
             img = ImageOps.fit(img, (780, 600), Image.Resampling.LANCZOS)
             self.bg_photo = ImageTk.PhotoImage(img)
         except Exception as e:
@@ -52,14 +48,12 @@ class RolltorApp(ctk.CTk):
             self.bg_photo = None
 
     def _setup_ui(self):
-        # Padding (padx/pady) verringert, um den Rand zu minimieren
         self.canvas_frame = ctk.CTkFrame(self, corner_radius=10)
         self.canvas_frame.pack(side="left", fill="both", expand=True, padx=10, pady=10)
 
         self.control_frame = ctk.CTkFrame(self, width=250, corner_radius=10)
         self.control_frame.pack(side="right", fill="y", padx=(0, 10), pady=10)
 
-        # Padding innerhalb des Canvas-Frames verringert
         self.canvas = tk.Canvas(self.canvas_frame, bg=COLOR_BG, highlightthickness=0)
         self.canvas.pack(fill="both", expand=True, padx=5, pady=5)
 
@@ -69,18 +63,18 @@ class RolltorApp(ctk.CTk):
         self.var_upper_limit = ctk.BooleanVar(value=False)
         self.var_lower_limit = ctk.BooleanVar(value=True)
 
-        # --- STEUERUNGS-PANEL (Taster-Logik) ---
-        ctk.CTkLabel(self.control_frame, text="Motorsteuerung (Halten)", font=("Arial", 16, "bold")).pack(pady=(20, 10))
+        # --- STEUERUNGS-PANEL (Latching Logik) ---
+        ctk.CTkLabel(self.control_frame, text="Motorsteuerung (Latching)", font=("Arial", 16, "bold")).pack(
+            pady=(20, 10))
 
-        self.btn_up = ctk.CTkButton(self.control_frame, text="Motor AUF (Up)", fg_color=COLOR_BTN_OFF)
+        # Changed to command callbacks for stateful toggling
+        self.btn_up = ctk.CTkButton(self.control_frame, text="Motor AUF (Up)", fg_color=COLOR_BTN_OFF,
+                                    command=self.toggle_motor_up)
         self.btn_up.pack(pady=5, padx=20)
-        self.btn_up.bind("<ButtonPress-1>", lambda e: self.set_motor_up(True))
-        self.btn_up.bind("<ButtonRelease-1>", lambda e: self.set_motor_up(False))
 
-        self.btn_down = ctk.CTkButton(self.control_frame, text="Motor AB (Down)", fg_color=COLOR_BTN_OFF)
+        self.btn_down = ctk.CTkButton(self.control_frame, text="Motor AB (Down)", fg_color=COLOR_BTN_OFF,
+                                      command=self.toggle_motor_down)
         self.btn_down.pack(pady=5, padx=20)
-        self.btn_down.bind("<ButtonPress-1>", lambda e: self.set_motor_down(True))
-        self.btn_down.bind("<ButtonRelease-1>", lambda e: self.set_motor_down(False))
 
         ctk.CTkLabel(self.control_frame, text="Endschalter (Sensoren)", font=("Arial", 16, "bold")).pack(pady=(20, 10))
 
@@ -108,22 +102,28 @@ class RolltorApp(ctk.CTk):
                                     text_color="#00ff00")
         self.lbl_pos.pack(pady=(10, 10))
 
-    # --- MOTOR-EVENTS ---
-    def set_motor_up(self, state):
+    # --- MOTOR-EVENTS (Stateful) ---
+    def toggle_motor_up(self):
         if not self.error:
-            self.var_up.set(state)
+            new_state = not self.var_up.get()
+            self.var_up.set(new_state)
+            if new_state:
+                self.var_down.set(False)  # Interlock: Ensure Down is off
+            self._sync_buttons()
 
-    def set_motor_down(self, state):
+    def toggle_motor_down(self):
         if not self.error:
-            self.var_down.set(state)
+            new_state = not self.var_down.get()
+            self.var_down.set(new_state)
+            if new_state:
+                self.var_up.set(False)  # Interlock: Ensure Up is off
+            self._sync_buttons()
 
-    # --- TASTER-EVENTS (Now properly indented!) ---
+    # --- SENSOR-EVENTS ---
     def toggle_manual_upper(self):
-        # Kehrt den aktuellen Zustand um (True wird False, False wird True)
         self.manual_upper_pressed = not self.manual_upper_pressed
 
     def toggle_manual_lower(self):
-        # Kehrt den aktuellen Zustand um (Typo 'pressede' fixed!)
         self.manual_lower_pressed = not self.manual_lower_pressed
 
     def _sync_buttons(self):
@@ -164,6 +164,14 @@ class RolltorApp(ctk.CTk):
             self.trigger_error()
             return
 
+        # Check sensors (Limit switches trigger at 100% and 0%)
+        is_upper = (self.pos >= 100.0) or self.manual_upper_pressed
+        is_lower = (self.pos <= 0.0) or self.manual_lower_pressed
+
+        self.var_upper_limit.set(is_upper)
+        self.var_lower_limit.set(is_lower)
+
+        # --- Speed Calculation ---
         target_speed = 0.0
         if up: target_speed = 0.3
         if down: target_speed = -0.3
@@ -175,14 +183,11 @@ class RolltorApp(ctk.CTk):
         elif self.current_speed > target_speed:
             self.current_speed = max(self.current_speed - accel, target_speed)
 
+        # Move the door
         self.pos += self.current_speed
 
-        is_upper = (self.pos >= 100.0) or self.manual_upper_pressed
-        is_lower = (self.pos <= 0.0) or self.manual_lower_pressed
-
-        self.var_upper_limit.set(is_upper)
-        self.var_lower_limit.set(is_lower)
-
+        # --- Hardware safety limits (Overtravel Fault) ---
+        # If the motor isn't turned off by the user or OPC UA after passing 100% or 0%, it crashes.
         if self.pos >= 102.0 or self.pos <= -2.0:
             self.trigger_error()
             return
@@ -193,15 +198,14 @@ class RolltorApp(ctk.CTk):
     def _draw_canvas(self):
         self.canvas.delete("all")
 
-        # --- NEUE KOORDINATEN (Füllt den unteren Rand aus) ---
-        cx, width = 355, 780  # Angepasste Breite und Zentrierung
-        top_y, bottom_y = 30, 630  # Zieht das Tor weiter nach oben und unten auf
+        cx, width = 355, 780
+        top_y, bottom_y = 30, 630
         rail_w = 25
 
         x_left = cx - width // 2
         x_right = cx + width // 2
 
-        # 0. HINTERGRUNDBILD (Die Landschaft draußen)
+        # 0. HINTERGRUNDBILD
         if hasattr(self, 'bg_photo') and self.bg_photo:
             self.canvas.create_image(cx, top_y + (bottom_y - top_y) // 2, image=self.bg_photo)
         else:
@@ -211,26 +215,23 @@ class RolltorApp(ctk.CTk):
         self.canvas.create_rectangle(x_left - rail_w, top_y, x_left, bottom_y, fill=COLOR_RAILS, outline="#111")
         self.canvas.create_rectangle(x_right, top_y, x_right + rail_w, bottom_y, fill=COLOR_RAILS, outline="#111")
 
-
         # 3. Rolltor
         current_bottom_y = bottom_y - (bottom_y - top_y) * (self.pos / 100.0)
         door_color = COLOR_DOOR_ERROR if self.error else COLOR_DOOR_NORMAL
 
         if current_bottom_y > top_y:
-            # 3.1 Massive Torwand
             self.canvas.create_rectangle(x_left, top_y, x_right, current_bottom_y, fill=door_color, outline="")
 
-            # 3.2 Lamellen-Optik
             slat_height = 15
             y = top_y + slat_height
             while y < current_bottom_y:
                 self.canvas.create_line(x_left, y, x_right, y, fill="#222", width=1)
                 y += slat_height
 
-            # 3.3 Abschlussleiste
-            self.canvas.create_rectangle(x_left, current_bottom_y - 5, x_right, current_bottom_y, fill="#444", outline="")
+            self.canvas.create_rectangle(x_left, current_bottom_y - 5, x_right, current_bottom_y, fill="#444",
+                                         outline="")
 
-        # 2. Sensoren (Endschalter LEDs) - Sichtbar auf der linken Seite
+        # 2. Sensoren (Endschalter LEDs)
         up_color = COLOR_LED_ON if self.var_upper_limit.get() else COLOR_LED_OFF
         self.canvas.create_rectangle(15, 40, 35, 60, fill=up_color, outline="#111")
 
@@ -241,7 +242,8 @@ class RolltorApp(ctk.CTk):
         motor_powered = (self.var_up.get() or self.var_down.get()) and not self.error
         motor_color = COLOR_MOTOR_ON if motor_powered else COLOR_MOTOR_OFF
 
-        self.canvas.create_rectangle(x_left - rail_w - 10, top_y - 30, x_right + rail_w + 10, top_y, fill="#333", outline="#111")
+        self.canvas.create_rectangle(x_left - rail_w - 10, top_y - 30, x_right + rail_w + 10, top_y, fill="#333",
+                                     outline="#111")
         self.canvas.create_oval(cx - 15, top_y - 25, cx + 15, top_y + 5, fill=motor_color, outline="#111", width=2)
 
     async def async_mainloop(self):
@@ -259,4 +261,3 @@ class RolltorApp(ctk.CTk):
 if __name__ == "__main__":
     app = RolltorApp()
     asyncio.run(app.async_mainloop())
-
