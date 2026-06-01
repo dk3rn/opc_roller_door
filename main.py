@@ -4,6 +4,10 @@ import json
 import logging
 from asyncua import Server, Client, ua
 from src.roller_door.roller_door import RolltorApp
+import sys                  # <-- NEU
+from pathlib import Path    # <-- NEU
+
+
 
 ENABLE_LOGGING = True
 if ENABLE_LOGGING:
@@ -55,8 +59,19 @@ class ClientSubHandler:
 
 async def run_opc_client(tor: RolltorApp):
     try:
-        with open("config.json", "r") as f:
+        # --- NEUER PFAD-CODE ---
+        if getattr(sys, 'frozen', False):
+            # Wenn als .exe ausgeführt, nutze den Ordner der .exe
+            base_dir = Path(sys.executable).parent
+        else:
+            # Im normalen Python-Skript nutze den Ordner der main.py
+            base_dir = Path(__file__).resolve().parent
+
+        config_path = base_dir / "config.json"
+
+        with open(config_path, "r") as f:
             config = json.load(f)
+        # -----------------------
     except Exception as e:
         _logger.error("Configuration Error: %s", e)
         return

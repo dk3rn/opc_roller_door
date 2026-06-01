@@ -2,6 +2,9 @@ import asyncio
 import tkinter as tk
 import customtkinter as ctk
 from PIL import Image, ImageTk, ImageOps
+import sys  # <-- NEU
+import os   # <-- NEU
+
 
 # Farbpalette
 COLOR_BG = "#1e1e1e"
@@ -40,7 +43,20 @@ class RolltorApp(ctk.CTk):
 
     def _load_background_image(self):
         try:
-            img = Image.open("assets/images/kyrgyzstan-info.jpg")
+            # --- NEUER PFAD-CODE FÜR ASSETS ---
+            if getattr(sys, 'frozen', False):
+                # PyInstaller entpackt Dateien mit --add-data in diesen Temp-Ordner
+                base_path = sys._MEIPASS
+            else:
+                # Normaler Entwicklungsordner
+                base_path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+                # Hinweis: Je nach genauer Ordnerstruktur (z.B. wenn roller_door.py in src/roller_door/ liegt)
+                # musst du hier ggf. os.path.dirname anpassen, um zum Hauptverzeichnis zu kommen.
+
+            img_path = os.path.join(base_path, "assets", "images", "kyrgyzstan-info.jpg")
+            # ----------------------------------
+
+            img = Image.open(img_path)
             img = ImageOps.fit(img, (780, 600), Image.Resampling.LANCZOS)
             self.bg_photo = ImageTk.PhotoImage(img)
         except Exception as e:
