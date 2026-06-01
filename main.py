@@ -104,12 +104,19 @@ async def run_opc_client(tor: RolltorApp):
                 _logger.info("Client successfully subscribed to variables.")
 
                 while tor.running:
+                    # Sensordaten (Ist-Werte) an die S7-1500 senden
                     await pos_var.write_value(ua.DataValue(ua.Variant(tor.pos, ua.VariantType.Double)))
                     await error_var.write_value(ua.DataValue(ua.Variant(tor.error, ua.VariantType.Boolean)))
-                    await up_var.write_value(ua.DataValue(ua.Variant(tor.var_up.get(), ua.VariantType.Boolean)))
-                    await down_var.write_value(ua.DataValue(ua.Variant(tor.var_down.get(), ua.VariantType.Boolean)))
-                    await upper_limit_var.write_value(ua.DataValue(ua.Variant(tor.var_upper_limit.get(), ua.VariantType.Boolean)))
-                    await lower_limit_var.write_value(ua.DataValue(ua.Variant(tor.var_lower_limit.get(), ua.VariantType.Boolean)))
+                    await upper_limit_var.write_value(
+                        ua.DataValue(ua.Variant(tor.var_upper_limit.get(), ua.VariantType.Boolean)))
+                    await lower_limit_var.write_value(
+                        ua.DataValue(ua.Variant(tor.var_lower_limit.get(), ua.VariantType.Boolean)))
+
+                    # DIESE BEIDEN ZEILEN ENTFERNEN ODER AUSKOMMENTIEREN:
+                    # Python darf die Steuerbefehle der SPS nicht überschreiben!
+                    # await up_var.write_value(ua.DataValue(ua.Variant(tor.var_up.get(), ua.VariantType.Boolean)))
+                    # await down_var.write_value(ua.DataValue(ua.Variant(tor.var_down.get(), ua.VariantType.Boolean)))
+
                     await asyncio.sleep(0.1)
 
         except Exception as e:
@@ -151,8 +158,8 @@ async def run_opc_server(tor: RolltorApp):
         while tor.running:
             await pos_var.write_value(tor.pos)
             await error_var.write_value(tor.error)
-            await up_var.write_value(tor.var_up.get())
-            await down_var.write_value(tor.var_down.get())
+            #await up_var.write_value(tor.var_up.get())
+            #await down_var.write_value(tor.var_down.get())
             await upper_limit_var.write_value(tor.var_upper_limit.get())
             await lower_limit_var.write_value(tor.var_lower_limit.get())
             await asyncio.sleep(0.1)
