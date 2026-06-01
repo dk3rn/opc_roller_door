@@ -1,11 +1,13 @@
 {
-  "server_url": "opc.tcp://127.0.0.1:4840/th-koeln/opcua/",
+  "server_url": "opc.tcp://192.168.0.20:4840",
   "nodes": {
-    "Position": "ns=2;s=Position",
-    "Error": "ns=2;s=Error",
-    "Motor_Up": "ns=2;s=Motor_Up",
-    "Motor_Down": "ns=2;s=Motor_Down",
-    "Upper_Limit": "ns=2;s=Upper_Limit",
-    "Lower_Limit": "ns=2;s=Lower_Limit"
+    "Error": "ns=3;s=\"DB_Communication\".\"Error\"",
+    "Lower_Limit": "ns=3;s=\"DB_Communication\".\"Lower_Limit\"",
+    "Motor_Down": "ns=3;s=\"DB_Communication\".\"Motor_Down\"",
+    "Motor_Up": "ns=3;s=\"DB_Communication\".\"Motor_Up\"",
+    "Position": "ns=3;s=\"DB_Communication\".\"Position\"",
+    "Upper_Limit": "ns=3;s=\"DB_Communication\".\"Upper_Limit\"",
+    "Cmd_Up": "ns=3;s=\"DB_Communication\".\"Cmd_Up\"",
+    "Cmd_Down": "ns=3;s=\"DB_Communication\".\"Cmd_Down\""
   }
 }

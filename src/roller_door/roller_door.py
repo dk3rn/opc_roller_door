@@ -50,8 +50,6 @@ class RolltorApp(ctk.CTk):
             else:
                 # Normaler Entwicklungsordner
                 base_path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-                # Hinweis: Je nach genauer Ordnerstruktur (z.B. wenn roller_door.py in src/roller_door/ liegt)
-                # musst du hier ggf. os.path.dirname anpassen, um zum Hauptverzeichnis zu kommen.
 
             img_path = os.path.join(base_path, "assets", "images", "kyrgyzstan-info.jpg")
             # ----------------------------------
@@ -74,23 +72,26 @@ class RolltorApp(ctk.CTk):
         self.canvas.pack(fill="both", expand=True, padx=5, pady=5)
 
         # --- SCHALTVARIABLEN ---
-        self.var_up = ctk.BooleanVar(value=False)
-        self.var_down = ctk.BooleanVar(value=False)
+        self.var_up = ctk.BooleanVar(value=False)          # Feedback von SPS: Motor läuft hoch
+        self.var_down = ctk.BooleanVar(value=False)        # Feedback von SPS: Motor läuft runter
+        self.var_cmd_up = ctk.BooleanVar(value=False)      # NEU: Anforderung an SPS (Taster Hoch)
+        self.var_cmd_down = ctk.BooleanVar(value=False)    # NEU: Anforderung an SPS (Taster Runter)
         self.var_upper_limit = ctk.BooleanVar(value=False)
         self.var_lower_limit = ctk.BooleanVar(value=True)
 
-        # --- STEUERUNGS-PANEL (Latching Logik) ---
-        ctk.CTkLabel(self.control_frame, text="Motorsteuerung (Latching)", font=("Arial", 16, "bold")).pack(
-            pady=(20, 10))
+        # --- STEUERUNGS-PANEL ---
+        ctk.CTkLabel(self.control_frame, text="Bedienung (SPS-Anforderung)", font=("Arial", 16, "bold")).pack(pady=(20, 10))
 
-        # Changed to command callbacks for stateful toggling
-        self.btn_up = ctk.CTkButton(self.control_frame, text="Motor AUF (Up)", fg_color=COLOR_BTN_OFF,
-                                    command=self.toggle_motor_up)
+        # Buttons mit Event-Binding für Drücken/Loslassen (Taster-Verhalten)
+        self.btn_up = ctk.CTkButton(self.control_frame, text="Taster AUF (Up)", fg_color=COLOR_BTN_OFF)
         self.btn_up.pack(pady=5, padx=20)
+        self.btn_up.bind("<ButtonPress-1>", lambda event: self.var_cmd_up.set(True))
+        self.btn_up.bind("<ButtonRelease-1>", lambda event: self.var_cmd_up.set(False))
 
-        self.btn_down = ctk.CTkButton(self.control_frame, text="Motor AB (Down)", fg_color=COLOR_BTN_OFF,
-                                      command=self.toggle_motor_down)
+        self.btn_down = ctk.CTkButton(self.control_frame, text="Taster AB (Down)", fg_color=COLOR_BTN_OFF)
         self.btn_down.pack(pady=5, padx=20)
+        self.btn_down.bind("<ButtonPress-1>", lambda event: self.var_cmd_down.set(True))
+        self.btn_down.bind("<ButtonRelease-1>", lambda event: self.var_cmd_down.set(False))
 
         ctk.CTkLabel(self.control_frame, text="Endschalter (Sensoren)", font=("Arial", 16, "bold")).pack(pady=(20, 10))
 
@@ -118,23 +119,6 @@ class RolltorApp(ctk.CTk):
                                     text_color="#00ff00")
         self.lbl_pos.pack(pady=(10, 10))
 
-    # --- MOTOR-EVENTS (Stateful) ---
-    def toggle_motor_up(self):
-        if not self.error:
-            new_state = not self.var_up.get()
-            self.var_up.set(new_state)
-            if new_state:
-                self.var_down.set(False)  # Interlock: Ensure Down is off
-            self._sync_buttons()
-
-    def toggle_motor_down(self):
-        if not self.error:
-            new_state = not self.var_down.get()
-            self.var_down.set(new_state)
-            if new_state:
-                self.var_up.set(False)  # Interlock: Ensure Up is off
-            self._sync_buttons()
-
     # --- SENSOR-EVENTS ---
     def toggle_manual_upper(self):
         self.manual_upper_pressed = not self.manual_upper_pressed
@@ -143,6 +127,7 @@ class RolltorApp(ctk.CTk):
         self.manual_lower_pressed = not self.manual_lower_pressed
 
     def _sync_buttons(self):
+        # Buttons leuchten grün, sobald die Rückmeldung der SPS (var_up/var_down) aktiv ist
         self.btn_up.configure(fg_color=COLOR_BTN_ON if self.var_up.get() else COLOR_BTN_OFF)
         self.btn_down.configure(fg_color=COLOR_BTN_ON if self.var_down.get() else COLOR_BTN_OFF)
         self.btn_upper_limit.configure(fg_color=COLOR_BTN_ON if self.var_upper_limit.get() else COLOR_BTN_OFF)
@@ -153,6 +138,8 @@ class RolltorApp(ctk.CTk):
         self.error = False
         self.var_up.set(False)
         self.var_down.set(False)
+        self.var_cmd_up.set(False)
+        self.var_cmd_down.set(False)
         self.manual_upper_pressed = False
         self.manual_lower_pressed = False
         self.current_speed = 0.0
@@ -164,6 +151,8 @@ class RolltorApp(ctk.CTk):
         self.error = True
         self.var_up.set(False)
         self.var_down.set(False)
+        self.var_cmd_up.set(False)
+        self.var_cmd_down.set(False)
         self.current_speed = 0.0
         self.lbl_error.configure(text="!!! FEHLER !!!")
         self._sync_buttons()
@@ -173,6 +162,7 @@ class RolltorApp(ctk.CTk):
             self.lbl_pos.configure(text="ERROR", text_color="#ff3333")
             return
 
+        # Die tatsächliche Bewegung erfolgt nur anhand der SPS-Rückmeldung
         up = self.var_up.get()
         down = self.var_down.get()
 
@@ -189,22 +179,18 @@ class RolltorApp(ctk.CTk):
 
         # --- Speed Calculation ---
         target_speed = 0.0
-        if up: target_speed = 0.3
-        if down: target_speed = -0.3
+        if up: target_speed = 0.1
+        if down: target_speed = -0.1
 
-        accel = 0.1
-
-        if self.current_speed < target_speed:
-            self.current_speed = min(self.current_speed + accel, target_speed)
-        elif self.current_speed > target_speed:
-            self.current_speed = max(self.current_speed - accel, target_speed)
+        # Beschleunigungsrampe entfernt - Direkte Zuweisung der Geschwindigkeit
+        self.current_speed = target_speed
 
         # Move the door
         self.pos += self.current_speed
 
         # --- Hardware safety limits (Overtravel Fault) ---
         # If the motor isn't turned off by the user or OPC UA after passing 100% or 0%, it crashes.
-        if self.pos >= 102.0 or self.pos <= -2.0:
+        if self.pos >= 110.0 or self.pos <= -10.0:
             self.trigger_error()
             return
 
@@ -277,3 +263,4 @@ class RolltorApp(ctk.CTk):
 if __name__ == "__main__":
     app = RolltorApp()
     asyncio.run(app.async_mainloop())
+

@@ -4,10 +4,8 @@ import json
 import logging
 from asyncua import Server, Client, ua
 from src.roller_door.roller_door import RolltorApp
-import sys                  # <-- NEU
-from pathlib import Path    # <-- NEU
-
-
+import sys
+from pathlib import Path
 
 ENABLE_LOGGING = True
 if ENABLE_LOGGING:
@@ -59,7 +57,7 @@ class ClientSubHandler:
 
 async def run_opc_client(tor: RolltorApp):
     try:
-        # --- NEUER PFAD-CODE ---
+        # --- PFAD-CODE ---
         if getattr(sys, 'frozen', False):
             # Wenn als .exe ausgeführt, nutze den Ordner der .exe
             base_dir = Path(sys.executable).parent
@@ -92,13 +90,17 @@ async def run_opc_client(tor: RolltorApp):
                 upper_limit_var = client.get_node(node_config.get("Upper_Limit"))
                 lower_limit_var = client.get_node(node_config.get("Lower_Limit"))
 
+                # --- NEU: Taster-Anforderungen ---
+                cmd_up_var = client.get_node(node_config.get("Cmd_Up"))
+                cmd_down_var = client.get_node(node_config.get("Cmd_Down"))
+
                 handler = ClientSubHandler(tor, client, config)
                 handler.node_mapping = {
                     node_config.get("Motor_Up"): "Motor_Up",
                     node_config.get("Motor_Down"): "Motor_Down"
                 }
 
-                sub = await client.create_subscription(500, handler)
+                sub = await client.create_subscription(200, handler)
                 await sub.subscribe_data_change([up_var, down_var])
 
                 _logger.info("Client successfully subscribed to variables.")
@@ -112,12 +114,16 @@ async def run_opc_client(tor: RolltorApp):
                     await lower_limit_var.write_value(
                         ua.DataValue(ua.Variant(tor.var_lower_limit.get(), ua.VariantType.Boolean)))
 
-                    # DIESE BEIDEN ZEILEN ENTFERNEN ODER AUSKOMMENTIEREN:
-                    # Python darf die Steuerbefehle der SPS nicht überschreiben!
-                    # await up_var.write_value(ua.DataValue(ua.Variant(tor.var_up.get(), ua.VariantType.Boolean)))
-                    # await down_var.write_value(ua.DataValue(ua.Variant(tor.var_down.get(), ua.VariantType.Boolean)))
+                    # --- NEU: Taster-Zustände an die S7-1500 senden ---
+                    await cmd_up_var.write_value(
+                        ua.DataValue(ua.Variant(tor.var_cmd_up.get(), ua.VariantType.Boolean)))
+                    await cmd_down_var.write_value(
+                        ua.DataValue(ua.Variant(tor.var_cmd_down.get(), ua.VariantType.Boolean)))
 
-                    await asyncio.sleep(0.1)
+                    # (Die Befehle für Motor_Up/Down bleiben korrekterweise auskommentiert,
+                    # da Python hier nur lesen darf)
+
+                    await asyncio.sleep(0.05)
 
         except Exception as e:
             _logger.error("OPC UA Client Error/Disconnect: %s", e)
@@ -144,6 +150,10 @@ async def run_opc_server(tor: RolltorApp):
     upper_limit_var = await rolltor_obj.add_variable(f"ns={idx};s=Upper_Limit", "Upper_Limit", False)
     lower_limit_var = await rolltor_obj.add_variable(f"ns={idx};s=Lower_Limit", "Lower_Limit", True)
 
+    # --- NEU ---
+    cmd_up_var = await rolltor_obj.add_variable(f"ns={idx};s=Cmd_Up", "Cmd_Up", False)
+    cmd_down_var = await rolltor_obj.add_variable(f"ns={idx};s=Cmd_Down", "Cmd_Down", False)
+
     await up_var.set_writable()
     await down_var.set_writable()
 
@@ -158,10 +168,13 @@ async def run_opc_server(tor: RolltorApp):
         while tor.running:
             await pos_var.write_value(tor.pos)
             await error_var.write_value(tor.error)
-            #await up_var.write_value(tor.var_up.get())
-            #await down_var.write_value(tor.var_down.get())
             await upper_limit_var.write_value(tor.var_upper_limit.get())
             await lower_limit_var.write_value(tor.var_lower_limit.get())
+
+            # --- NEU ---
+            await cmd_up_var.write_value(tor.var_cmd_up.get())
+            await cmd_down_var.write_value(tor.var_cmd_down.get())
+
             await asyncio.sleep(0.1)
 
 
@@ -183,12 +196,20 @@ async def run_dummy_server():
     upper_limit_var = await rolltor_obj.add_variable(f"ns={idx};s=Upper_Limit", "Upper_Limit", False)
     lower_limit_var = await rolltor_obj.add_variable(f"ns={idx};s=Lower_Limit", "Lower_Limit", True)
 
+    # --- NEU ---
+    cmd_up_var = await rolltor_obj.add_variable(f"ns={idx};s=Cmd_Up", "Cmd_Up", False)
+    cmd_down_var = await rolltor_obj.add_variable(f"ns={idx};s=Cmd_Down", "Cmd_Down", False)
+
     await pos_var.set_writable()
     await error_var.set_writable()
     await up_var.set_writable()
     await down_var.set_writable()
     await upper_limit_var.set_writable()
     await lower_limit_var.set_writable()
+
+    # --- NEU ---
+    await cmd_up_var.set_writable()
+    await cmd_down_var.set_writable()
 
     _logger.info("Starting DUMMY OPC UA Server at %s", server.endpoint.geturl())
     async with server:
@@ -250,3 +271,4 @@ if __name__ == "__main__":
 
     # asyncio.run() startet den Event-Loop und führt die async main() Funktion aus
     asyncio.run(main())
+
