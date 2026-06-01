@@ -76,6 +76,7 @@ class RolltorApp(ctk.CTk):
         self.var_down = ctk.BooleanVar(value=False)        # Feedback von SPS: Motor läuft runter
         self.var_cmd_up = ctk.BooleanVar(value=False)      # NEU: Anforderung an SPS (Taster Hoch)
         self.var_cmd_down = ctk.BooleanVar(value=False)    # NEU: Anforderung an SPS (Taster Runter)
+        self.var_cmd_stop = ctk.BooleanVar(value=False)
         self.var_upper_limit = ctk.BooleanVar(value=False)
         self.var_lower_limit = ctk.BooleanVar(value=True)
 
@@ -88,6 +89,13 @@ class RolltorApp(ctk.CTk):
         self.btn_up.bind("<ButtonPress-1>", lambda event: self.var_cmd_up.set(True))
         self.btn_up.bind("<ButtonRelease-1>", lambda event: self.var_cmd_up.set(False))
 
+        # --- NEU: Taster STOP ---
+        self.btn_stop = ctk.CTkButton(self.control_frame, text="Taster STOP", fg_color="#cc0000", hover_color="#ff3333")
+        self.btn_stop.pack(pady=5, padx=20)
+        self.btn_stop.bind("<ButtonPress-1>", lambda event: self.var_cmd_stop.set(True))
+        self.btn_stop.bind("<ButtonRelease-1>", lambda event: self.var_cmd_stop.set(False))
+
+        # ... (Taster AB Code) ...
         self.btn_down = ctk.CTkButton(self.control_frame, text="Taster AB (Down)", fg_color=COLOR_BTN_OFF)
         self.btn_down.pack(pady=5, padx=20)
         self.btn_down.bind("<ButtonPress-1>", lambda event: self.var_cmd_down.set(True))
@@ -117,7 +125,7 @@ class RolltorApp(ctk.CTk):
         # Positionsanzeige
         self.lbl_pos = ctk.CTkLabel(self.control_frame, text="Position: 0%", font=("Courier", 24, "bold"),
                                     text_color="#00ff00")
-        self.lbl_pos.pack(pady=(10, 10))
+        self.lbl_pos.pack(side="bottom", pady=(0, 10))
 
     # --- SENSOR-EVENTS ---
     def toggle_manual_upper(self):
@@ -140,6 +148,7 @@ class RolltorApp(ctk.CTk):
         self.var_down.set(False)
         self.var_cmd_up.set(False)
         self.var_cmd_down.set(False)
+        self.var_cmd_stop.set(False)  # <-- NEU
         self.manual_upper_pressed = False
         self.manual_lower_pressed = False
         self.current_speed = 0.0

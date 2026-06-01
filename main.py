@@ -87,6 +87,7 @@ async def run_opc_client(tor: RolltorApp):
                 error_var = client.get_node(node_config.get("Error"))
                 up_var = client.get_node(node_config.get("Motor_Up"))
                 down_var = client.get_node(node_config.get("Motor_Down"))
+                cmd_stop_var = client.get_node(node_config.get("Cmd_Stop"))  # <-- NEU
                 upper_limit_var = client.get_node(node_config.get("Upper_Limit"))
                 lower_limit_var = client.get_node(node_config.get("Lower_Limit"))
 
@@ -113,6 +114,9 @@ async def run_opc_client(tor: RolltorApp):
                         ua.DataValue(ua.Variant(tor.var_upper_limit.get(), ua.VariantType.Boolean)))
                     await lower_limit_var.write_value(
                         ua.DataValue(ua.Variant(tor.var_lower_limit.get(), ua.VariantType.Boolean)))
+                    # --- NEU: Stopp-Zustand an S7-1500 senden ---
+                    await cmd_stop_var.write_value(
+                        ua.DataValue(ua.Variant(tor.var_cmd_stop.get(), ua.VariantType.Boolean)))
 
                     # --- NEU: Taster-Zustände an die S7-1500 senden ---
                     await cmd_up_var.write_value(

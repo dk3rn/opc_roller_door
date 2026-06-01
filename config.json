@@ -8,6 +8,7 @@
     "Position": "ns=3;s=\"DB_Communication\".\"Position\"",
     "Upper_Limit": "ns=3;s=\"DB_Communication\".\"Upper_Limit\"",
     "Cmd_Up": "ns=3;s=\"DB_Communication\".\"Cmd_Up\"",
-    "Cmd_Down": "ns=3;s=\"DB_Communication\".\"Cmd_Down\""
+    "Cmd_Down": "ns=3;s=\"DB_Communication\".\"Cmd_Down\"",
+    "Cmd_Stop": "ns=3;s=\"DB_Communication\".\"Cmd_Stop\""
   }
 }
