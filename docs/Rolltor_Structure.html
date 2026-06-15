@@ -1,0 +1,2009 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rolltor OPC UA — Dokumentation</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+:root {
+    --ink: #0d0f14;
+    --ink-2: #1a1d26;
+    --ink-3: #252936;
+    --rule: rgba(255,255,255,0.07);
+    --rule-2: rgba(255,255,255,0.13);
+    --text: #e8eaf2;
+    --text-2: #9ca3b8;
+    --text-3: #5c6278;
+    --gold: #c9a84c;
+    --gold-l: #e8c97a;
+    --gold-d: #8a6c28;
+    --teal: #2dd4bf;
+    --teal-d: #0d9488;
+    --blue: #60a5fa;
+    --blue-d: #1d4ed8;
+    --red: #f87171;
+    --green: #4ade80;
+    --amber: #fbbf24;
+    --radius: 4px;
+    --radius-lg: 10px;
+}
+body.light-mode {
+    --ink: #f4f7fb;
+    --ink-2: #ffffff;
+    --ink-3: #e2e8f0;
+    --rule: rgba(15,23,42,0.10);
+    --rule-2: rgba(15,23,42,0.16);
+    --text: #0f172a;
+    --text-2: #334155;
+    --text-3: #64748b;
+    --gold: #b45309;
+    --gold-l: #92400e;
+    --gold-d: #78350f;
+    --teal: #0e7490;
+    --teal-d: #155e75;
+    --blue: #0369a1;
+    --red: #be123c;
+    --green: #047857;
+    --amber: #b45309;
+    background: radial-gradient(circle at 28% -12%, rgba(14,165,233,0.16), transparent 34rem), radial-gradient(circle at 90% 10%, rgba(124,58,237,0.10), transparent 28rem), var(--ink);
+    color: #0f172a;
+}
+body.light-mode header { background: linear-gradient(180deg, rgba(255,255,255,0.88), rgba(244,247,251,0.64)); border-bottom-color: var(--rule); }
+body.light-mode nav#navbar { background: rgba(255,255,255,0.92); border-color: var(--rule); box-shadow: 0 20px 60px rgba(15,23,42,0.08); }
+body.light-mode section { background: rgba(255,255,255,0.78); border-color: var(--rule); box-shadow: 0 24px 70px rgba(15,23,42,0.08); }
+body.light-mode .diagram-topbar, body.light-mode .explanation-header, body.light-mode thead, body.light-mode .formula-cell, body.light-mode .glossary-item, body.light-mode .error-scenario-item { background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(241,245,249,0.98)); }
+body.light-mode .diagram-body, body.light-mode .explanation-body { background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(248,250,252,0.98)); }
+body.light-mode td, body.light-mode .section-intro, body.light-mode header p, body.light-mode .step-content, body.light-mode .explanation-lead, body.light-mode footer p { color: #475569; }
+body.light-mode .diagram-wrap, body.light-mode .explanation, body.light-mode .table-wrap, body.light-mode .formula-grid, body.light-mode .glossary-grid, body.light-mode .error-scenario { border-color: rgba(15,23,42,0.12); box-shadow: 0 18px 50px rgba(15,23,42,0.07); }
+body.light-mode .analogy-box { background: rgba(2,132,199,0.05); border-color: rgba(2,132,199,0.14); color: #334155; }
+body.light-mode .mermaid svg { filter: drop-shadow(0 18px 28px rgba(15,23,42,0.10)); }
+body.light-mode .mermaid .label, body.light-mode .mermaid text, body.light-mode .mermaid tspan, body.light-mode .mermaid .nodeLabel, body.light-mode .mermaid .edgeLabel, body.light-mode .mermaid .messageText, body.light-mode .mermaid .labelText, body.light-mode .mermaid .loopText, body.light-mode .mermaid .branchLabel, body.light-mode .mermaid .actor, body.light-mode .mermaid .actor text, body.light-mode .mermaid .sectionTitle text, body.light-mode .mermaid .taskText, body.light-mode .mermaid .commit-id, body.light-mode .mermaid .commit-msg { fill: #0f172a !important; color: #0f172a !important; stroke: none !important; }
+body.light-mode .mermaid .node rect, body.light-mode .mermaid .node polygon, body.light-mode .mermaid .node circle, body.light-mode .mermaid .node ellipse, body.light-mode .mermaid .actor, body.light-mode .mermaid .labelBox, body.light-mode .mermaid .note, body.light-mode .mermaid .cluster rect { stroke: #94a3b8 !important; }
+body.light-mode .mermaid .actor, body.light-mode .mermaid .labelBox, body.light-mode .mermaid .note, body.light-mode .mermaid .node rect, body.light-mode .mermaid .node polygon, body.light-mode .mermaid .node circle, body.light-mode .mermaid .node ellipse, body.light-mode .mermaid .cluster rect { fill: #ffffff !important; }
+body.light-mode .mermaid .cluster rect { fill: #f8fafc !important; }
+body.light-mode .mermaid .activation0, body.light-mode .mermaid .activation1, body.light-mode .mermaid rect[class*='activation'] { fill: #dbeafe !important; stroke: #60a5fa !important; }
+body.light-mode .mermaid .activation2, body.light-mode .mermaid .activation3 { fill: #dbeafe !important; stroke: #60a5fa !important; }
+body.light-mode .mermaid .node path { stroke: #94a3b8 !important; }
+body.light-mode .mermaid .node circle, body.light-mode .mermaid .node ellipse { stroke: #94a3b8 !important; }
+body.light-mode .mermaid .task, body.light-mode .mermaid .task0, body.light-mode .mermaid .task1, body.light-mode .mermaid .task2, body.light-mode .mermaid .task3 { stroke: #94a3b8 !important; fill: #ffffff !important; }
+body.light-mode .mermaid .actor-man { stroke: #94a3b8 !important; fill: #ffffff !important; }
+body.light-mode .mermaid .cluster polygon { stroke: #94a3b8 !important; fill: #f8fafc !important; }
+body.light-mode .mermaid .cluster path { stroke: #94a3b8 !important; }
+body.light-mode .mermaid .actor-line, body.light-mode .mermaid .lifeLine, body.light-mode .mermaid .activation-line { stroke: #94a3b8 !important; }
+body.light-mode .mermaid .sequenceNumber { fill: #ffffff !important; stroke: #0369a1 !important; }
+body.light-mode .mermaid .commit-arrow { stroke: #0369a1 !important; fill: #0369a1 !important; }
+body.light-mode .mermaid marker path { stroke: #0369a1 !important; }
+body.light-mode .mermaid .edgePath .path, body.light-mode .mermaid .flowchart-link, body.light-mode .mermaid .messageLine0, body.light-mode .mermaid .messageLine1, body.light-mode .mermaid .sequenceNumber, body.light-mode .mermaid .activation0, body.light-mode .mermaid .activation1, body.light-mode .mermaid .commit-arrow, body.light-mode .mermaid marker path { stroke: #0369a1 !important; fill: #0369a1 !important; }
+body.light-mode .mermaid .arrowheadPath, body.light-mode .mermaid .marker, body.light-mode .mermaid path.marker { stroke: #0369a1 !important; fill: none !important; }
+body.light-mode .mermaid .edgeLabel rect, body.light-mode .mermaid .labelBkg { fill: #ffffff !important; stroke: #cbd5e1 !important; }
+body.light-mode .theme-toggle { color: #0f172a; background: rgba(14,165,233,0.07); }
+body.light-mode .theme-toggle .theme-pill { color: #075985; background: rgba(2,132,199,0.10); border-color: rgba(2,132,199,0.18); }
+body.light-mode .zoom-btn { background: rgba(255,255,255,0.95); color: #0f172a; border-color: rgba(15,23,42,0.12); box-shadow: 0 8px 24px rgba(15,23,42,0.08); }
+body.light-mode .zoom-btn:hover { background: rgba(2,132,199,0.10); color: #075985; border-color: rgba(2,132,199,0.18); }
+body.light-mode .zoom-level { color: #475569; }
+body.light-mode nav#navbar a:hover { color: #0f172a; background: rgba(14,165,233,0.08); }
+body.light-mode nav#navbar a.active { color: #075985; background: linear-gradient(135deg, rgba(14,165,233,0.14), rgba(124,58,237,0.08)); border-color: rgba(14,165,233,0.22); }
+body.light-mode .diagram-topbar { background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(241,245,249,0.98)); }
+body.light-mode .diagram-body { background: repeating-linear-gradient(0deg, rgba(148,163,184,0.07) 0, rgba(148,163,184,0.07) 1px, transparent 1px, transparent 28px), repeating-linear-gradient(90deg, rgba(148,163,184,0.07) 0, rgba(148,163,184,0.07) 1px, transparent 1px, transparent 28px), linear-gradient(180deg, rgba(255,255,255,0.98), rgba(248,250,252,0.98)); }
+body.light-mode .footer-logo { color: #0f172a; }
+body.light-mode .card-kicker { color: #0f172a; }
+body.light-mode .card-title { color: #0f172a; }
+body.light-mode .config-card { background: rgba(255,255,255,0.78); }
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; scrollbar-width: thin; }
+body {
+    font-family: 'DM Sans', system-ui, sans-serif;
+    background: radial-gradient(circle at 30% -10%, rgba(56,189,248,0.10), transparent 34rem), radial-gradient(circle at 90% 12%, rgba(167,139,250,0.08), transparent 30rem), var(--ink);
+    color: var(--text);
+    line-height: 1.75;
+    font-size: 15px;
+    overflow-x: hidden;
+}
+body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.6;
+}
+body.light-mode::after { opacity: 0.05; }
+header {
+    position: relative;
+    margin-left: 336px;
+    padding: 3.2rem 3rem 2.6rem;
+    text-align: left;
+    border-bottom: 1px solid var(--rule);
+    background: linear-gradient(180deg, rgba(17,24,39,0.72), rgba(11,15,23,0.45));
+    overflow: hidden;
+}
+body.light-mode header { background: linear-gradient(180deg, rgba(255,255,255,0.88), rgba(244,247,251,0.64)); }
+header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 50% -10%, rgba(45,212,191,0.12) 0%, transparent 70%), radial-gradient(ellipse 60% 40% at 80% 110%, rgba(201,168,76,0.06) 0%, transparent 60%);
+    pointer-events: none;
+}
+body.light-mode header::before { display: none; }
+.header-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 1rem;
+    padding: 0.4rem 1.2rem;
+    border: 1px solid rgba(45,212,191,0.25);
+    border-radius: 2px;
+    background: rgba(45,212,191,0.06);
+}
+body.light-mode .header-eyebrow { border-radius: 999px; }
+.header-eyebrow::before { content: ''; width: 5px; height: 5px; background: var(--teal); border-radius: 50%; animation: blink 2.5s ease-in-out infinite; }
+@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.2; } }
+header h1 {
+    font-family: 'DM Sans', system-ui, sans-serif;
+    font-size: clamp(2rem, 4vw, 3.4rem);
+    font-weight: 650;
+    font-style: normal;
+    letter-spacing: -0.04em;
+    color: var(--text);
+    max-width: 980px;
+}
+body.light-mode header h1 { font-style: normal; }
+header h1 em {
+    font-style: normal;
+    background: linear-gradient(135deg, var(--teal) 0%, var(--gold) 50%, var(--blue) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+header p { color: var(--text-2); font-size: 1rem; max-width: 820px; margin: 0; }
+.header-rule { display: none; }
+nav#navbar {
+    position: fixed;
+    top: 24px;
+    left: 22px;
+    bottom: 24px;
+    width: 292px;
+    z-index: 200;
+    background: rgba(8,13,22,0.92);
+    border: 1px solid var(--rule);
+    border-radius: 22px;
+    box-shadow: 0 20px 60px rgba(2, 6, 23, 0.26);
+    backdrop-filter: blur(22px) saturate(150%);
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+body.light-mode nav#navbar { background: rgba(255,255,255,0.92); }
+nav#navbar .nav-inner {
+    max-width: none;
+    display: block;
+    padding: 1.25rem;
+    overflow: visible;
+    flex: 1;
+}
+nav#navbar .nav-inner::before {
+    content: 'Rolltor OPC UA';
+    display: block;
+    color: #f8fafc;
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    padding: 0.35rem 0.75rem 0.2rem;
+}
+body.light-mode nav#navbar .nav-inner::before { color: #0f172a; }
+nav#navbar .nav-inner::after {
+    content: 'Dokumentation';
+    display: block;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.66rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-3);
+    padding: 0 0.75rem 1.2rem;
+    border-bottom: 1px solid var(--rule);
+    margin-bottom: 1rem;
+}
+nav#navbar ul { display: flex; flex-direction: column; gap: 0.18rem; }
+nav#navbar a {
+    display: grid;
+    grid-template-columns: 2.4rem 1fr;
+    align-items: center;
+    padding: 0.62rem 0.72rem;
+    border-radius: 10px;
+    color: var(--text-3);
+    font-size: 0.86rem;
+    white-space: normal;
+    border: 1px solid transparent;
+    text-decoration: none;
+    transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+nav#navbar a::after { display: none; }
+nav#navbar a:hover { color: #f8fafc; background: rgba(148,163,184,0.08); border-color: rgba(148,163,184,0.08); }
+body.light-mode nav#navbar a:hover { color: #0f172a; }
+nav#navbar a.active {
+    color: #e0f2fe;
+    background: linear-gradient(135deg, rgba(56,189,248,0.18), rgba(167,139,250,0.10));
+    border-color: rgba(125,211,252,0.22);
+}
+body.light-mode nav#navbar a.active { color: #075985; }
+.nav-num {
+    width: 1.85rem;
+    height: 1.85rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    border-radius: 8px;
+    background: rgba(148,163,184,0.08);
+    color: var(--text-3);
+    font-size: 0.68rem;
+    font-family: 'DM Mono', monospace;
+    opacity: 1;
+    flex-shrink: 0;
+}
+nav#navbar a.active .nav-num { color: var(--teal); background: rgba(45,212,191,0.10); }
+.theme-toggle-wrap {
+    margin: 0.75rem 0.75rem 0.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--rule);
+}
+.theme-toggle {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 0.72rem 0.82rem;
+    border-radius: 12px;
+    border: 1px solid var(--rule);
+    background: rgba(148,163,184,0.07);
+    color: #f8fafc;
+    font-family: 'DM Sans', system-ui, sans-serif;
+    font-size: 0.86rem;
+    cursor: pointer;
+    transition: background .18s ease, border-color .18s ease, transform .18s ease;
+}
+.theme-toggle:hover { background: rgba(45,212,191,0.10); border-color: rgba(45,212,191,0.26); transform: translateY(-1px); }
+.theme-toggle .theme-pill {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--teal);
+    background: rgba(45,212,191,0.10);
+    border: 1px solid rgba(45,212,191,0.16);
+    border-radius: 999px;
+    padding: 0.16rem 0.48rem;
+}
+@media (max-width: 980px) { .theme-toggle-wrap { display: none; } }
+main {
+    max-width: 1280px;
+    margin: 0 0 0 336px;
+    padding: 3rem clamp(1.5rem, 3vw, 3.5rem) 6rem;
+}
+footer {
+    margin-left: 336px;
+    border-top: 1px solid var(--rule);
+    padding: 3rem 1.5rem;
+    text-align: center;
+}
+.footer-inner { max-width: 1280px; margin: 0 auto; }
+.footer-logo { font-family: 'DM Serif Display', serif; font-size: 1.1rem; font-style: italic; color: var(--teal); margin-bottom: 0.75rem; }
+footer p { font-size: 0.82rem; color: var(--text-3); line-height: 1.7; }
+section {
+    margin-bottom: 4rem;
+    background: rgba(17,24,39,0.42);
+    border: 1px solid var(--rule);
+    border-radius: 24px;
+    padding: clamp(1.25rem, 2.3vw, 2rem);
+    box-shadow: 0 24px 80px rgba(0,0,0,0.18);
+    opacity: 0;
+    transform: translateY(24px);
+}
+body.light-mode section { box-shadow: 0 24px 70px rgba(15,23,42,0.08); }
+section.visible { animation: fadeUp 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+@keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+.section-header { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 1rem; padding-bottom: 1.25rem; border-bottom: 1px solid var(--rule); }
+.section-num {
+    order: 2;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--teal);
+    background: rgba(45,212,191,0.08);
+    border: 1px solid rgba(45,212,191,0.16);
+    border-radius: 999px;
+    padding: 0.3rem 0.7rem;
+    letter-spacing: 0.12em;
+    flex-shrink: 0;
+}
+section h2 {
+    font-family: 'DM Sans', system-ui, sans-serif;
+    font-weight: 650;
+    font-size: clamp(1.35rem, 2.4vw, 2rem);
+    letter-spacing: -0.035em;
+    color: var(--text);
+}
+.section-intro { color: var(--text-2); font-size: 0.97rem; max-width: 88ch; margin-bottom: 2rem; font-weight: 300; line-height: 1.85; }
+.section-meta { display: flex; align-items: center; gap: 0.75rem; margin-top: 0.5rem; padding-top: 0.6rem; }
+.section-timestamp { display: inline-flex; align-items: center; gap: 0.4rem; font-family: 'DM Mono', monospace; font-size: 0.68rem; letter-spacing: 0.06em; color: var(--text-3); padding: 0.2rem 0.6rem; background: rgba(255,255,255,0.025); border: 1px solid var(--rule); border-radius: 999px; }
+body.light-mode .section-timestamp { color: #64748b; }
+.section-timestamp::before { content: '⏱'; font-size: 0.7rem; opacity: 0.5; }
+.section-version { display: inline-flex; align-items: center; gap: 0.35rem; font-family: 'DM Mono', monospace; font-size: 0.68rem; letter-spacing: 0.06em; color: var(--teal); padding: 0.2rem 0.6rem; background: rgba(45,212,191,0.05); border: 1px solid rgba(45,212,191,0.12); border-radius: 999px; }
+.diagram-wrap { position: relative; border: 1px solid var(--rule); border-radius: var(--radius-lg); overflow: hidden; margin-bottom: 2.5rem; }
+.diagram-wrap::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(90deg, rgba(45,212,191,0.035) 1px, transparent 1px), linear-gradient(180deg, rgba(45,212,191,0.035) 1px, transparent 1px);
+    background-size: 28px 28px;
+    mask-image: linear-gradient(to bottom, transparent, black 80px, black calc(100% - 20px), transparent);
+    opacity: .75;
+    z-index: 0;
+}
+.diagram-topbar, .diagram-body { position: relative; z-index: 1; }
+.diagram-topbar {
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1.25rem;
+    background: var(--ink-2);
+    border-bottom: 1px solid var(--rule);
+}
+body.light-mode .diagram-topbar { background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(241,245,249,0.98)); }
+.diagram-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--teal);
+}
+.diagram-label::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    background: currentColor;
+    box-shadow: 0 0 0 4px color-mix(in srgb, currentColor 14%, transparent);
+}
+.label-seq { color: var(--teal); }
+.label-flow { color: var(--blue); }
+.label-react { color: var(--gold); }
+.diagram-dots { display: flex; gap: 5px; }
+.diagram-dots span { width: 9px; height: 9px; border-radius: 50%; background: rgba(45,212,191,0.26); }
+.diagram-body {
+    background: rgba(10,12,18,0.7);
+    padding: clamp(1.4rem, 2.2vw, 2.2rem);
+    min-height: 220px;
+    overflow: hidden;
+    cursor: grab;
+    position: relative;
+}
+body.light-mode .diagram-body {
+    background: repeating-linear-gradient(0deg, rgba(148,163,184,0.07) 0, rgba(148,163,184,0.07) 1px, transparent 1px, transparent 28px), repeating-linear-gradient(90deg, rgba(148,163,184,0.07) 0, rgba(148,163,184,0.07) 1px, transparent 1px, transparent 28px), linear-gradient(180deg, rgba(255,255,255,0.98), rgba(248,250,252,0.98));
+}
+.diagram-body.is-panning { cursor: grabbing; }
+.diagram-body .zoom-inner { transform-origin: 0 0; transition: transform 0.1s ease-out; min-width: 100%; }
+.diagram-body.is-panning .zoom-inner { transition: none; }
+.mermaid { display: flex; justify-content: center; width: 100%; min-height: 120px; align-items: center; }
+.mermaid svg { max-width: 100%; height: auto; filter: drop-shadow(0 18px 32px rgba(0,0,0,0.18)); }
+body.light-mode .mermaid svg { filter: drop-shadow(0 18px 28px rgba(15,23,42,0.10)); }
+.mermaid .node rect, .mermaid .node polygon, .mermaid .node circle, .mermaid .node ellipse { rx: 10px !important; ry: 10px !important; stroke-width: 1.2px !important; }
+.mermaid .edgePath .path { stroke-width: 1.6px !important; }
+.mermaid .cluster rect { rx: 14px !important; ry: 14px !important; stroke-dasharray: 5 4 !important; }
+.mermaid text { font-family: 'DM Sans', system-ui, sans-serif !important; }
+.mermaid .label, .mermaid .nodeLabel { line-height: 1.35 !important; }
+.zoom-controls { position: absolute; top: 0.65rem; right: 0.65rem; display: flex; gap: 4px; z-index: 10; }
+.zoom-btn {
+    width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;
+    background: rgba(13,15,20,0.85); backdrop-filter: blur(8px);
+    border: 1px solid rgba(255,255,255,0.1); border-radius: var(--radius);
+    color: var(--text-2); cursor: pointer; font-size: 14px; font-family: 'DM Mono', monospace;
+    transition: all 0.15s ease; user-select: none; line-height: 1; padding: 0;
+}
+.zoom-btn:hover { background: rgba(45,212,191,0.15); border-color: rgba(45,212,191,0.3); color: var(--teal); }
+.zoom-level { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text-3); min-width: 36px; text-align: center; display: flex; align-items: center; justify-content: center; }
+.explanation { display: grid; grid-template-columns: 1fr; gap: 0; border: 1px solid var(--rule); border-radius: var(--radius-lg); overflow: hidden; margin-bottom: 2.5rem; }
+.explanation-header { background: var(--ink-2); padding: 1rem 1.5rem; border-bottom: 1px solid var(--rule); display: flex; align-items: center; gap: 0.75rem; }
+.explanation-icon { width: 28px; height: 28px; border-radius: var(--radius); background: rgba(45,212,191,0.1); border: 1px solid rgba(45,212,191,0.2); display: flex; align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0; }
+.explanation-title { font-family: 'DM Mono', monospace; font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--teal); }
+.explanation-body { padding: 1.75rem 1.5rem; background: rgba(18,21,32,0.6); }
+.explanation-lead { font-size: 0.95rem; color: var(--text-2); line-height: 1.85; margin-bottom: 1.5rem; font-weight: 300; }
+.steps { display: flex; flex-direction: column; gap: 0; }
+.step { display: grid; grid-template-columns: 2.5rem 1fr; gap: 1rem; padding: 1rem 0; border-bottom: 1px solid var(--rule); }
+.step:last-child { border-bottom: none; padding-bottom: 0; }
+.step:first-child { padding-top: 0; }
+.step-num { font-family: 'DM Mono', monospace; font-size: 0.75rem; color: var(--teal); padding-top: 1px; opacity: 0.7; }
+.step-content { font-size: 0.92rem; color: var(--text-2); line-height: 1.7; }
+.step-content strong { color: var(--text); font-weight: 500; }
+.analogy-box { margin-top: 1.5rem; padding: 1.1rem 1.4rem; background: rgba(45,212,191,0.04); border: 1px solid rgba(45,212,191,0.12); border-left: 3px solid var(--teal); border-radius: 0 var(--radius) var(--radius) 0; font-size: 0.9rem; color: var(--text-2); line-height: 1.75; font-style: italic; }
+.analogy-box strong { font-style: normal; color: var(--teal); font-weight: 500; }
+.insight-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; margin: 1.25rem 0 2rem; }
+.insight-card { border: 1px solid var(--rule); border-radius: 16px; background: rgba(15,23,42,0.62); padding: 1rem 1.1rem; }
+body.light-mode .insight-card { background: rgba(255,255,255,0.78); }
+.insight-kicker { font-family: 'DM Mono', monospace; font-size: 0.66rem; color: var(--text-3); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 0.35rem; }
+.insight-title { color: var(--text); font-weight: 600; margin-bottom: 0.35rem; }
+.insight-body { color: var(--text-2); font-size: 0.9rem; line-height: 1.65; }
+.table-section { margin-bottom: 2.5rem; }
+.table-heading { font-family: 'DM Mono', monospace; font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-3); margin-bottom: 0.75rem; }
+.table-wrap { border: 1px solid var(--rule); border-radius: var(--radius-lg); overflow: hidden; }
+table { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
+thead { background: var(--ink-2); }
+th { padding: 0.75rem 1.25rem; text-align: left; font-family: 'DM Mono', monospace; font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-3); font-weight: 400; border-bottom: 1px solid var(--rule); white-space: nowrap; }
+td { padding: 0.8rem 1.25rem; color: var(--text-2); border-bottom: 1px solid var(--rule); vertical-align: top; line-height: 1.6; }
+tbody tr:last-child td { border-bottom: none; }
+tbody tr:hover { background: rgba(255,255,255,0.02); }
+td code, th code { font-family: 'DM Mono', monospace; font-size: 0.82em; color: var(--teal); background: rgba(45,212,191,0.07); padding: 0.15em 0.5em; border-radius: 3px; }
+td strong { color: var(--text); font-weight: 500; }
+.sub-heading { font-family: 'DM Serif Display', serif; font-size: 1.1rem; font-weight: 400; color: var(--text); margin: 2.5rem 0 1rem; padding-left: 1rem; border-left: 2px solid var(--teal-d); }
+.formula-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1px; background: var(--rule); border: 1px solid var(--rule); border-radius: var(--radius-lg); overflow: hidden; margin-bottom: 2.5rem; }
+.formula-cell { background: var(--ink-2); padding: 1.1rem 1.25rem; }
+.formula-label { font-size: 0.8rem; color: var(--text-3); margin-bottom: 0.4rem; }
+.formula-value { font-family: 'DM Mono', monospace; font-size: 0.85rem; color: var(--teal); }
+.badge { display: inline-flex; align-items: center; gap: 0.3rem; font-family: 'DM Mono', monospace; font-size: 0.7rem; letter-spacing: 0.08em; padding: 0.2rem 0.65rem; border-radius: 999px; }
+.badge-teal { background: rgba(45,212,191,0.08); color: var(--teal); border: 1px solid rgba(45,212,191,0.15); }
+.badge-blue { background: rgba(96,165,250,0.08); color: var(--blue); border: 1px solid rgba(96,165,250,0.15); }
+.badge-gold { background: rgba(201,168,76,0.08); color: var(--gold); border: 1px solid rgba(201,168,76,0.15); }
+.glossary-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1px; background: var(--rule); border: 1px solid var(--rule); border-radius: var(--radius-lg); overflow: hidden; margin-bottom: 2.5rem; }
+.glossary-item { background: var(--ink-2); padding: 1.1rem 1.35rem; transition: background 0.15s ease; }
+body.light-mode .glossary-item { background: #ffffff; }
+.glossary-item:hover { background: rgba(26,29,38,0.9); }
+body.light-mode .glossary-item:hover { background: #f8fafc; }
+.glossary-term { font-family: 'DM Mono', monospace; font-size: 0.85rem; color: var(--teal); margin-bottom: 0.3rem; display: flex; align-items: center; gap: 0.5rem; }
+.glossary-term .g-tag { font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.1rem 0.45rem; border-radius: 999px; font-weight: 500; }
+.g-tag-algo { background: rgba(45,212,191,0.1); color: var(--teal); border: 1px solid rgba(45,212,191,0.15); }
+.g-tag-data { background: rgba(96,165,250,0.1); color: var(--blue); border: 1px solid rgba(96,165,250,0.15); }
+.g-tag-auth { background: rgba(251,191,36,0.1); color: var(--amber); border: 1px solid rgba(251,191,36,0.15); }
+.g-tag-infra { background: rgba(201,168,76,0.1); color: var(--gold); border: 1px solid rgba(201,168,76,0.15); }
+.g-tag-format { background: rgba(74,222,128,0.1); color: var(--green); border: 1px solid rgba(74,222,128,0.15); }
+.glossary-def { font-size: 0.88rem; color: var(--text-2); line-height: 1.65; }
+.glossary-def code { font-family: 'DM Mono', monospace; font-size: 0.8em; color: var(--teal); background: rgba(45,212,191,0.07); padding: 0.1em 0.4em; border-radius: 3px; }
+.deployment-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+.deployment-card { border: 1px solid var(--rule); border-radius: 16px; background: rgba(15,23,42,0.68); padding: 1rem; }
+body.light-mode .deployment-card { background: rgba(255,255,255,0.78); }
+.deployment-card h3 { font-size: 0.96rem; color: var(--text); margin-bottom: 0.55rem; font-weight: 650; }
+.deployment-card p { color: var(--text-2); font-size: 0.9rem; line-height: 1.65; }
+.config-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+.config-card { border: 1px solid var(--rule); border-radius: 16px; background: rgba(15,23,42,0.68); padding: 1rem; transition: background 0.15s ease; }
+.config-card:hover { background: rgba(15,23,42,0.82); }
+.config-card h3 { font-size: 0.96rem; color: var(--text); margin-bottom: 0.55rem; font-weight: 650; }
+.config-card p { color: var(--text-2); font-size: 0.9rem; line-height: 1.65; }
+body.light-mode .config-card { background: rgba(255,255,255,0.78); }
+body.light-mode .config-card:hover { background: rgba(255,255,255,0.92); }
+.card-kicker { font-family: 'DM Mono', monospace; font-size: 0.7rem; letter-spacing: 0.11em; text-transform: uppercase; color: var(--teal); margin-bottom: 0.45rem; }
+.card-title { font-size: 1rem; color: var(--text); font-weight: 600; margin-bottom: 0.45rem; }
+.card-body { font-size: 0.9rem; color: var(--text-2); line-height: 1.7; }
+.change-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+.change-card { border: 1px solid var(--rule); border-radius: 16px; background: rgba(15,23,42,0.68); padding: 1.15rem 1.2rem; box-shadow: 0 12px 40px rgba(2, 6, 23, 0.12); transition: background 0.15s ease; }
+.change-card:hover { background: rgba(15,23,42,0.82); }
+.change-list { list-style: none; display: grid; gap: 0.8rem; margin-bottom: 2rem; }
+.change-list li { border: 1px solid var(--rule); border-radius: 12px; padding: 0.9rem 1rem; background: rgba(15,23,42,0.45); color: var(--text-2); transition: background 0.15s ease; }
+.change-list li:hover { background: rgba(15,23,42,0.62); }
+.change-list strong { color: var(--text); }
+body.light-mode .change-card { background: rgba(255,255,255,0.78); }
+body.light-mode .change-card:hover { background: rgba(255,255,255,0.92); }
+body.light-mode .change-list li { background: rgba(255,255,255,0.65); }
+body.light-mode .change-list li:hover { background: rgba(255,255,255,0.85); }
+.diagram-note { margin-top: 0.75rem; font-size: 0.78rem; color: var(--text-3); font-family: 'DM Mono', monospace; }
+.error-badge { display: inline-flex; align-items: center; font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.08em; padding: 0.15rem 0.5rem; border-radius: 2px; margin-top: 0.4rem; }
+.err-fatal { background: rgba(248,113,113,0.1); color: var(--red); border: 1px solid rgba(248,113,113,0.2); }
+.err-warn { background: rgba(251,191,36,0.1); color: var(--amber); border: 1px solid rgba(251,191,36,0.2); }
+.err-recover { background: rgba(74,222,128,0.1); color: var(--green); border: 1px solid rgba(74,222,128,0.2); }
+body.light-mode .error-badge { color: #0f172a; }
+body.light-mode .err-fatal { background: rgba(190,18,60,0.08); color: #be123c; border: 1px solid rgba(190,18,60,0.2); }
+body.light-mode .err-warn { background: rgba(180,83,9,0.08); color: #b45309; border: 1px solid rgba(180,83,9,0.2); }
+body.light-mode .err-recover { background: rgba(4,120,87,0.08); color: #047857; border: 1px solid rgba(4,120,87,0.2); }
+.code-section { margin-bottom: 2.5rem; }
+pre {
+    background: rgba(8,10,16,0.9);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    overflow-x: auto;
+    position: relative;
+}
+pre::before {
+    content: 'JSON';
+    position: absolute;
+    top: 0.75rem; right: 1rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    color: var(--text-3);
+}
+pre code {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.83rem;
+    line-height: 1.85;
+    color: var(--text);
+}
+body.light-mode pre { background: #0f172a; }
+body.light-mode pre code { color: #e2e8f0; }
+.risk-low { color: var(--green); }
+.risk-mid { color: var(--amber); }
+.risk-high { color: var(--red); }
+body.light-mode .risk-low { color: #047857; }
+body.light-mode .risk-mid { color: #b45309; }
+body.light-mode .risk-high { color: #be123c; }
+.model-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+.model-card { border: 1px solid var(--rule); border-radius: 16px; background: rgba(15,23,42,0.68); padding: 1.15rem 1.2rem; box-shadow: 0 12px 40px rgba(2, 6, 23, 0.12); transition: background 0.15s ease; }
+.model-card:hover { background: rgba(15,23,42,0.82); }
+body.light-mode .model-card { background: rgba(255,255,255,0.78); }
+body.light-mode .model-card:hover { background: rgba(255,255,255,0.92); }
+@media (max-width: 980px) {
+    nav#navbar { position: sticky; top: 0; width: 100%; height: auto; border-right: none; border-bottom: 1px solid var(--rule); border-radius: 0; margin: 0; }
+    nav#navbar .nav-inner { overflow-x: auto; padding: 0.7rem; }
+    nav#navbar .nav-inner::before, nav#navbar .nav-inner::after { display: none; }
+    nav#navbar ul { flex-direction: row; min-width: max-content; }
+    nav#navbar a { grid-template-columns: auto 1fr; white-space: nowrap; }
+    nav#navbar a:hover { background: rgba(148,163,184,0.08); }
+    nav#navbar a.active { background: linear-gradient(135deg, rgba(56,189,248,0.18), rgba(167,139,250,0.10)); }
+    .nav-num { width: auto; height: auto; display: inline-flex; margin-right: 0.4rem; background: transparent; padding: 0; }
+    header, main, footer { margin-left: 0; }
+    header { padding: 2.4rem 1.4rem; }
+    main { padding: 2rem 1rem 4rem; }
+    .insight-grid { grid-template-columns: 1fr; }
+}
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
+    </style>
+</head>
+<body>
+<header>
+    <div class="header-eyebrow">Rolltor OPC UA Dokumentation · TH K&ouml;ln</div>
+    <h1><em>Rolltor</em> — OPC UA Simulationssystem</h1>
+    <p>Dokumentation des Rolltor-Systems: Architektur, Steuerung, OPC UA Server/Client, UI-Visualisierung und Fehlerbehandlung f&uuml;r die Rolltor-Simulation an der TH K&ouml;ln.</p>
+</header>
+
+<nav id="navbar">
+    <div class="nav-inner">
+        <ul>
+            <li><a href="#s1"><span class="nav-num">01</span>&Uuml;berblick</a></li>
+            <li><a href="#s2"><span class="nav-num">02</span>RolltorApp UI</a></li>
+            <li><a href="#s3"><span class="nav-num">03</span>Motorsteuerung</a></li>
+            <li><a href="#s3b"><span class="nav-num">03b</span>Pro-Taster-Fehlerschutz</a></li>
+            <li><a href="#s4"><span class="nav-num">04</span>OPC UA Server</a></li>
+            <li><a href="#s4a"><span class="nav-num">04a</span>OPC UA Client</a></li>
+            <li><a href="#s4b"><span class="nav-num">04b</span>Both-Mode &amp; Lifecycle</a></li>
+            <li><a href="#s4c"><span class="nav-num">04c</span>server.py</a></li>
+            <li><a href="#s5"><span class="nav-num">05</span>Vollzugriff-Steuerung</a></li>
+            <li><a href="#s6"><span class="nav-num">06</span>Konfiguration</a></li>
+            <li><a href="#s6a"><span class="nav-num">06a</span>Warnhinweise</a></li>
+            <li><a href="#s7"><span class="nav-num">07</span>Fehlerbehandlung</a></li>
+            <li><a href="#s8"><span class="nav-num">08</span>Abh&auml;ngigkeiten</a></li>
+            <li><a href="#s9"><span class="nav-num">09</span>Glossar</a></li>
+        </ul>
+        <div class="theme-toggle-wrap">
+            <button class="theme-toggle" id="themeToggle" type="button" aria-label="Light oder Dark Mode wechseln">
+                <span id="themeToggleText">Light Modus</span>
+                <span class="theme-pill" id="themeTogglePill">Light</span>
+            </button>
+        </div>
+    </div>
+</nav>
+
+<main>
+
+<!-- 01 &U;BERBLICK -->
+<section id="s1">
+    <div class="section-header">
+        <h2>System&uuml;berblick — Rolltor OPC UA Simulation</h2>
+        <span class="section-num">01 / FLOWCHART</span>
+    </div>
+    <div class="section-meta">
+        <span class="section-timestamp">Aktualisiert: 27.05.2026</span>
+        <span class="section-version">v0.1</span>
+    </div>
+    <p class="section-intro">Das Rolltor-Projekt simuliert ein rolltor mitGUI, motorsteuerung und opc ua-kommunikation. es besteht aus drei hauptkomponenten: der <strong>ui-anwendung</strong> (rolltorapp), dem <strong>opc-ua-server</strong> und dem <strong>opc-ua-client</strong>. alle komponenten kommunizieren &uuml;ber asynchrone tasks.</p>
+
+    <div class="insight-grid">
+        <div class="insight-card"><div class="insight-kicker">UI</div><div class="insight-title">RolltorApp · customtkinter</div><div class="insight-body">Visuelle simulation eines rolltors mit canvas-rendering, motorsteuerung und endschalter-sensoren. position 0-100% mit tr&auml;gheits-berechnung.</div></div>
+        <div class="insight-card"><div class="insight-kicker">Server</div><div class="insight-title">OPC UA Server · asyncua</div><div class="insight-body">Stellt alle rolltor-variable &uuml;ber opc-ua protokoll zur verf&uuml;gung: position, fehler, motor auf/ab, endschalter. schreibbare variablen f&uuml;r fernsteuerung.</div></div>
+        <div class="insight-card"><div class="insight-kicker">Client</div><div class="insight-title">OPC UA Client · asyncua</div><div class="insight-body">Verbindet sich mit einem OPC UA Server, abonniert motor-up/down &uuml;ber data-change und schreibt position, fehler und endschalter-zust&auml;nde zur&uuml;ck.</div></div>
+    </div>
+
+    <div class="diagram-wrap">
+        <div class="diagram-topbar">
+            <span class="diagram-label label-flow">Systemarchitektur — Komponenten-Diagramm</span>
+            <div class="diagram-dots"><span></span><span></span><span></span></div>
+        </div>
+        <div class="diagram-body">
+            <div class="mermaid">
+graph TB
+    subgraph UI["RolltorApp CustomTkinter"]
+        A["RolltorApp<br/>pos error var_up var_down"]
+        B["async_mainloop<br/>update_logic + draw_canvas"]
+        C["Canvas-Rendering<br/>Rolltor Sensoren Motor"]
+        A --> B --> C
+    end
+
+    subgraph SERVER["OPC UA Server asyncua"]
+        D["run_opc_server<br/>Server-Instanz"]
+        E["6 OPC-UA-Variablen<br/>Position Error Up Down Limit"]
+        F["SubHandler<br/>Motor-Up-Down Subscription"]
+        D --> E --> F
+    end
+
+    subgraph CLIENT["OPC UA Client asyncua"]
+        G["run_opc_client<br/>Client-Verbindung"]
+        H["Subscribe Motor-Up-Down"]
+        I["Write Position Error Limits"]
+        G --> H --> I
+    end
+
+    subgraph CONFIG["Konfiguration"]
+        J["config.json<br/>server_url + nodes"]
+    end
+
+    subgraph MODES["Start-Modi main-py"]
+        M1["server"]
+        M2["client"]
+        M3["both"]
+    end
+
+    M1 --> D
+    M2 --> G
+    M3 --> D
+    M3 --> G
+
+    A --> D
+    A --> G
+    J --> G
+    J --> D
+
+    style UI fill:#082e2a,stroke:#0d9488
+    style SERVER fill:#0d2847,stroke:#185FA5
+    style CLIENT fill:#2e2208,stroke:#854F0B
+    style CONFIG fill:#2d1f3d,stroke:#7c3aed
+    style MODES fill:#1a2a4a,stroke:#185FA5
+            </div>
+        </div>
+    </div>
+
+    <div class="explanation">
+        <div class="explanation-header">
+            <div class="explanation-icon">◈</div>
+            <span class="explanation-title">Was zeigt dieses Diagramm?</span>
+        </div>
+        <div class="explanation-body">
+            <p class="explanation-lead">Das Diagramm zeigt die drei hauptkomponenten des rolltor-projekts: die UI-Anwendung (customtkinter), den opc-ua-server und den opc-ua-client. alle drei arbeiten &uuml;ber einen gemeinsamen zustand (var_up, var_down, pos, error) zusammen.</p>
+            <div class="steps">
+                <div class="step">
+                    <span class="step-num">01</span>
+                    <div class="step-content"><strong>RolltorApp (oben):</strong> Die GUI-Anwendung basiert auf customtkinter und zeichnet ein rolltor mit f&uuml;hrungsschienen, jalousielamellen und motor. sie berechnet position, geschwindigkeit und tr&auml;gheit alle 20ms im async_mainloop.</div>
+                </div>
+                <div class="step">
+                    <span class="step-num">02</span>
+                    <div class="step-content"><strong>OPC UA Server (Mitte):</strong> Wenn der Server-Modus w&auml;hlt, wird ein OPC UA Server gestartet, der 6 variablen &uuml;ber den namespace <code>http://th-koeln.de/ait/opcua/rolltor/</code> bereitstellt. Motor_Up und Motor_Down sind schreibbar — das erm&ouml;glicht fernsteuerung von aussen.</div>
+                </div>
+                <div class="step">
+                    <span class="step-num">03</span>
+                    <div class="step-content"><strong>OPC UA Client (unten):</strong> Im Client-Modus verbindet sich das programm mit einem externen OPC UA Server (standard: opc.tcp://127.0.0.1:4840/th-koeln/opcua/). es abonniert motor_up/down &uuml;ber subscription und schreibt laufend position, fehler und endschalter-zust&auml;nde zur&uuml;ck.</div>
+                </div>
+                <div class="step">
+                    <span class="step-num">04</span>
+                    <div class="step-content"><strong>Start-Modi (unten):</strong> main.py kann in drei Modi gestartet werden: <code>--mode server</code> (nur server), <code>--mode client</code> (nur client, braucht externen server) oder <code>--mode both</code> (eigener server + client). config.json enth&auml;lt die server-url und node-id mapping.</div>
+                </div>
+            </div>
+            <div class="analogy-box">
+                <strong>Analogie:</strong> Stellen sie sich eine rollobert&uuml;r vor. die UI ist die taschenlampe, mit der sie das tor sehen. der server ist die t&uuml;rsteuerung in der garage, die jeder erreichen kann. der client ist die fernbedienung, die status abfragt und befehle sendet. config.json ist der Schl&uuml;ssel, der weiss, welche adresse die t&uuml;rsteuerung hat.
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 02 ROLLTORAPP UI -->
+<section id="s2">
+    <div class="section-header">
+        <h2>RolltorApp — UI &amp; Canvas-Rendering</h2>
+        <span class="section-num">02 / FLOWCHART</span>
+    </div>
+    <div class="section-meta">
+        <span class="section-timestamp">Aktualisiert: 27.05.2026</span>
+        <span class="section-version">v0.1</span>
+    </div>
+    <p class="section-intro">Die <code>RolltorApp</code>-klasse ist das herzst&uuml;ck der visuellen simulation. sie basiert auf customtkinter und rendert ein rolltor mit f&uuml;hrungsschienen, jalousie-lamellen, endschalter-leds und motor-visualisierung auf einem tk-canvas.</p>
+
+    <div class="diagram-wrap">
+        <div class="diagram-topbar">
+            <span class="diagram-label label-flow">RolltorApp — Klassenstruktur</span>
+            <div class="diagram-dots"><span></span><span></span><span></span></div>
+        </div>
+        <div class="diagram-body">
+            <div class="mermaid">
+classDiagram
+    class RolltorApp {
+        +float pos
+        +float current_speed
+        +bool error
+        +bool running
+        +BooleanVar var_up
+        +BooleanVar var_down
+        +BooleanVar var_upper_limit
+        +BooleanVar var_lower_limit
+        +async_mainloop()
+        +_update_logic()
+        +_draw_canvas()
+        +toggle_motor_up()
+        +toggle_motor_down()
+        +toggle_manual_upper()
+        +toggle_manual_lower()
+        +trigger_reset()
+        +trigger_error()
+        +_sync_buttons()
+    }
+    class SubHandler {
+        +datachange_notification()
+        +event_notification()
+    }
+    class ClientSubHandler {
+        +node_mapping
+        +datachange_notification()
+        +event_notification()
+    }
+    RolltorApp --> SubHandler : "wird &uuml;bergeben"
+    RolltorApp --> ClientSubHandler : "wird &uuml;bergeben"
+            </div>
+        </div>
+    </div>
+
+    <div class="formula-grid">
+        <div class="formula-cell"><div class="formula-label">Fenster-Gr&ouml;sse</div><div class="formula-value">740 x 500 Pixel (nicht resizebar)</div></div>
+        <div class="formula-cell"><div class="formula-label">Position</div><div class="formula-value">0.0 = geschlossen, 100.0 = offen</div></div>
+        <div class="formula-cell"><div class="formula-label">Target Speed</div><div class="formula-value">±0.3 pro Frame (auf/ab)</div></div>
+        <div class="formula-cell"><div class="formula-label">Beschleunigung</div><div class="formula-value">0.1 pro Frame (Tr&auml;gheit)</div></div>
+        <div class="formula-cell"><div class="formula-label">Overtravel Fault</div><div class="formula-value">pos &gt;= 102.0 oder pos &lt;= -2.0 → Fehler</div></div>
+        <div class="formula-cell"><div class="formula-label">Update-Intervall</div><div class="formula-value">20ms (50 FPS)</div></div>
+    </div>
+
+    <div class="explanation">
+        <div class="explanation-header">
+            <div class="explanation-icon">◈</div>
+            <span class="explanation-title">Was zeigt dieses Diagramm?</span>
+        </div>
+        <div class="explanation-body">
+            <p class="explanation-lead">Die RolltorApp verwaltet den gesamten zustand des rolltors — position, geschwindigkeit, fehler und motorsteuerung. der _update_logic berechnet neue position basierend auf motor-eingabe und tr&auml;gheit. der _draw_canvas zeichet das visuelles bild.</p>
+            <div class="steps">
+                <div class="step">
+                    <span class="step-num">01</span>
+                    <div class="step-content"><strong>Hintergrundbild:</strong> Beim starten wird ein foto aus <code>assets/images/kyrgyzstan-info.jpg</code> geladen und auf canvas-gr&ouml;sse zugeschnitten. falls das laden fehlschl&auml;gt, wird ein dunkler hintergrund gerendert.</div>
+                </div>
+                <div class="step">
+                    <span class="step-num">02</span>
+                    <div class="step-content"><strong>Steuerelemente (rechts):</strong> vier schaltfl&auml;chen steuern den motor (auf/ab) und die endschalter (oben/unten). alle verwenden latching-logik — druck schaltet ein, weiterer druck schaltet aus. ein reset-knopf l&ouml;scht den fehlerzustand.</div>
+                </div>
+                <div class="step">
+                    <span class="step-num">03</span>
+                    <div class="step-content"><strong>Interlock:</strong> Auf und Ab k&ouml;nnen nicht gleichzeitig aktiv sein. wenn eine richtung gedr&uuml;ckt wird, wird die andere automatisch deaktiviert. das verhindert einen fehlerzustand durch gleichzeitige eingabe.</div>
+                </div>
+                <div class="step">
+                    <span class="step-num">04</span>
+                    <div class="step-content"><strong>Tr&auml;gheit:</strong> die aktuelle geschwindigkeit &auml;ndert sich schrittweise (accel=0.1) in richtung zielgeschwindigkeit (±0.3). das erzeugt eine realistische bwegung statt instantanem starten/stoppen.</div>
+                </div>
+            </div>
+            <div class="analogy-box">
+                <strong>Analogie:</strong> Stellen Sie sich eine b&uuml;roklappe vor. wenn sie aufdr&uuml;cken, f&auml;hrt sie nicht sofort mit vollem tempo hoch — sie beschleunigt langsam. wenn sie loslassen, h&auml;lt sie nicht sofort an, sondern kommt langsam zum stehen. genau so verh&auml;lt sich das rolltor.
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 03 MOTORSTEUERUNG -->
+<section id="s3">
+    <div class="section-header">
+        <h2>Motorsteuerung — Latching-Logik &amp; Physik</h2>
+        <span class="section-num">03 / SEQUENCE</span>
+    </div>
+    <div class="section-meta">
+        <span class="section-timestamp">Aktualisiert: 27.05.2026</span>
+        <span class="section-version">v0.1</span>
+    </div>
+    <p class="section-intro">die motorsteuerung basiert auf einer latching-logik: dr&uuml;cken einschalten, erneut dr&uuml;cken ausschalten. zwei BooleanVars (var_up, var_down) steuern die richtung, endschalter deaktivieren den motor automatisch.</p>
+
+    <div class="diagram-wrap">
+        <div class="diagram-topbar">
+            <span class="diagram-label label-seq">Motorsteuerung — Ablaufdiagramm</span>
+            <div class="diagram-dots"><span></span><span></span><span></span></div>
+        </div>
+        <div class="diagram-body">
+            <div class="mermaid">
+sequenceDiagram
+    participant User as Benutzer
+    participant UI as RolltorApp
+    participant Logic as _update_logic()
+    participant Canvas as _draw_canvas()
+
+    User->>UI: Klick "Motor AUF"
+    UI->>UI: toggle_motor_up()
+    UI->>UI: var_up = !var_up
+    UI->>UI: Interlock (var_down = false)
+    UI->>UI: _sync_buttons()
+
+    loop Alle 20ms
+        Logic->>UI: _update_logic()
+        alt error == True
+            UI-->>UI: Zeige "!!! FEHLER !!!"
+        else error == False
+            UI->>Logic: up &amp;&amp; down?
+            Logic-->>UI: Ja → trigger_error()
+            Logic-->>UI: Nein
+            Logic->>UI: pos &gt;= 100.0?
+            Logic-->>UI: Ja → var_upper_limit = true
+            Logic->>UI: pos &lt;= 0.0?
+            Logic-->>UI: Ja → var_lower_limit = true
+            Logic->>UI: current_speed += accel
+            Logic->>UI: pos += current_speed
+            alt pos &gt;= 102.0 or pos &lt;= -2.0
+                Logic-->>UI: trigger_error()
+            end
+        end
+        Canvas->>UI: _draw_canvas()
+        Canvas-->>UI: Canvas leeren + neu zeichnen
+    end
+            </div>
+        </div>
+    </div>
+
+    <div class="explanation">
+        <div class="explanation-header">
+            <div class="explanation-icon">◈</div>
+            <span class="explanation-title">Was zeigt dieses Diagramm?</span>
+        </div>
+        <div class="explanation-body">
+            <p class="explanation-lead">die motorsteuerung l&auml;uft im _update_logic alle 20ms ab. sie pr&uuml;ft fehler, endschalter, berechnet geschwindigkeit &uuml;nderung und update die position.</p>
+            <div class="steps">
+                <div class="step">
+                    <span class="step-num">01</span>
+                    <div class="step-content"><strong>Interlock:</strong> wenn up und down gleichzeitig true sind, wird sofort ein fehler ausgel&ouml;st. das simuliert ein kurzes schließen bei motor-relais.</div>
+                </div>
+                <div class="step">
+                    <span class="step-num">02</span>
+                    <div class="step-content"><strong>Endschalter:</strong> bei pos &gt;= 100.0 wird var_upper_limit auf true gesetzt. bei pos &lt;= 0.0 wird var_lower_limit auf true gesetzt. das deaktiviert den motor automatisch und leuchtet die entsprechende LED auf dem canvas.</div>
+                </div>
+                <div class="step">
+                    <span class="step-num">03</span>
+                    <div class="step-content"><strong>Tr&auml;gheits-physik:</strong> current_speed &auml;ndert sich schrittweise um accel (0.1) pro frame. wenn auf gedr&uuml;ckt, steigt die geschwindigkeit auf max 0.3. wenn ab gedr&uuml;ckt, sinkt sie auf -0.3.</div>
+                </div>
+                <div class="step">
+                    <span class="step-num">04</span>
+                    <div class="step-content"><strong>Overtravel Fault:</strong> die position darf 102% nicht &uuml;berschreiten und -2% nicht unterschreiten. wenn doch, wird ein fehler ausgel&ouml;st — das simuliert ein mechanisches &uuml;berfahren der endlagen.</div>
+                </div>
+            </div>
+            <div class="analogy-box">
+                <strong>Analogie:</strong> so funktioniert eine echte rollobert&uuml;r. die endschalter sind physikalische schalter, die den motor abschalten, wenn das tor vollst&auml;ndig offen oder geschlossen ist. die &uuml;berfahrtsabsicherung verhindert, dass der motor &uuml;ber die anhalteposition hinaus l&auml;uft — wenn doch, h&ouml;rt man einen knall und der antrieb schaltet ab.
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 04 OPC UA SERVER -->
+<section id="s4">
+    <div class="section-header">
+        <h2>OPC UA Server — Kommunikation mit der Aussenwelt</h2>
+        <span class="section-num">04 / FLOWCHART</span>
+    </div>
+    <div class="section-meta">
+        <span class="section-timestamp">Aktualisiert: 27.05.2026</span>
+        <span class="section-version">v0.1</span>
+    </div>
+    <p class="section-intro">der opc-ua-server stellt alle rolltor-variable &uuml;ber das OPC UA protokoll zur verf&uuml;gung. andere systeme k&ouml;nnen sich damit verbinden und position, fehler und motorstatus ablesen oder motor-steuern.</p>
+
+    <div class="diagram-wrap">
+        <div class="diagram-topbar">
+            <span class="diagram-label label-flow">OPC UA Server — Variablen-Hierarchie</span>
+            <div class="diagram-dots"><span></span><span></span><span></span></div>
+        </div>
+        <div class="diagram-body">
+            <div class="mermaid">
+flowchart TD
+    A["Objects\n[Standard OPC UA Node]"] --> B["ns=1;Rolltor\n[Benutzerdefinierter Namespace]"]
+    B --> C["ns=1;s=Position\nVariantType.Double\nWert: 0.0 - 100.0"]
+    B --> D["ns=1;s=Error\nVariantType.Boolean\nWert: True/False"]
+    B --> E["ns=1;s=Motor_Up\nVariantType.Boolean\nWert: True/False [WRITABLE]"]
+    B --> F["ns=1;s=Motor_Down\nVariantType.Boolean\nWert: True/False [WRITABLE]"]
+    B --> G["ns=1;s=Upper_Limit\nVariantType.Boolean\nWert: True/False"]
+    B --> H["ns=1;s=Lower_Limit\nVariantType.Boolean\nWert: True/False"]
+
+    style A fill:#1a2a4a,stroke:#185FA5,color:#e8eaf2
+    style B fill:#0d2847,stroke:#185FA5,color:#e8eaf2
+    style C fill:#082e2a,stroke:#0d9488,color:#e8eaf2
+    style D fill:#2e2208,stroke:#854F0B,color:#e8eaf2
+    style E fill:#2e2208,stroke:#854F0B,color:#e8eaf2
+    style F fill:#2e2208,stroke:#854F0B,color:#e8eaf2
+    style G fill:#082e2a,stroke:#0d9488,color:#e8eaf2
+    style H fill:#082e2a,stroke:#0d9488,color:#e8eaf2
+            </div>
+        </div>
+    </div>
+
+    <div class="diagram-wrap" style="margin-top: 2.5rem;">
+        <div class="diagram-topbar">
+            <span class="diagram-label label-seq">OPC UA Server — Datenfluss</span>
+            <div class="diagram-dots"><span></span><span></span><span></span></div>
+        </div>
+        <div class="diagram-body">
+            <div class="mermaid">
+sequenceDiagram
+    participant S as run_opc_server()
+    participant SV as Server
+    participant V as 6 OPC-UA Variablen
+    participant H as SubHandler
+    participant T as Tor (RolltorApp)
+
+    S->>SV: Server() + init()
+    SV->>SV: set_endpoint("opc.tcp://0.0.0.0:4840/th-koeln/opcua/")
+    SV->>SV: set_server_name("Rolltor OPC UA Server")
+    SV->>SV: register_namespace("http://th-koeln.de/ait/opcua/rolltor/")
+
+    SV->>V: add_object(idx, "Rolltor")
+    V->>V: add_variable(idx, "Position")
+    V->>V: add_variable(idx, "Error")
+    V->>V: add_variable(idx, "Motor_Up") ← set_writable()
+    V->>V: add_variable(idx, "Motor_Down") ← set_writable()
+    V->>V: add_variable(idx, "Upper_Limit")
+    V->>V: add_variable(idx, "Lower_Limit")
+
+    SV->>H: create_subscription(500, handler)
+    H->>H: subscribe_data_change(Motor_Up, Motor_Down)
+
+    Note over S,T: Hauptschleife — alle 100ms
+    loop while tor.running
+        S->>V: write_value(tor.pos)
+        S->>V: write_value(tor.error)
+        S->>V: write_value(tor.var_up.get())
+        S->>V: write_value(tor.var_down.get())
+        S->>V: write_value(tor.var_upper_limit.get())
+        S->>V: write_value(tor.var_lower_limit.get())
+        S->>SV: sleep(0.1)
+        H->>T: on_data_change(Motor_Up → var_up)
+        H->>T: on_data_change(Motor_Down → var_down)
+    end
+            </div>
+        </div>
+    </div>
+
+    <div class="explanation">
+        <div class="explanation-header">
+            <div class="explanation-icon">◈</div>
+            <span class="explanation-title">Was zeigt dieses Diagramm?</span>
+        </div>
+        <div class="explanation-body">
+            <p class="explanation-lead">der opc-ua-server erstellt einen server mit dem namespace <code>http://th-koeln.de/ait/opcua/rolltor/</code> und stellt 6 variable bereit. motor_up und motor_down sind schreibbar, sodass externe systeme das tor direkt steuern k&ouml;nnen.</p>
+            <div class="steps">
+                <div class="step">
+                    <span class="step-num">01</span>
+                    <div class="step-content"><strong>Server-Initialisierung:</strong> ein neuer asyncua Server wird erstellt und auf <code>opc.tcp://0.0.0.0:4840/th-koeln/opcua/</code> geh&ouml;rt. der benutzerdefinierte namespace <code>http://th-koeln.de/ait/opcua/rolltor/</code> wird registriert.</div>
+                </div>
+                <div class="step">
+                    <span class="step-num">02</span>
+                    <div class="step-content"><strong>Variablen erstellen:</strong> 6 variablen werden unter dem Objekt <code>Rolltor</code> erstellt. Motor_Up und Motor_Down werden mit <code>set_writable()</code> markiert — das ist die einzige m&ouml;glichkeit, das tor von aussen zu steuern.</div>
+                </div>
+                <div class="step">
+                    <span class="step-num">03</span>
+                    <div class="step-content"><strong>Subscription:</strong> ein SubHandler abonniert data-change events auf Motor_Up und Motor_Down. wenn ein externer client den wert &auml;ndert, wird die zustandsaenderung sofort an die RolltorApp weitergeleitet.</div>
+                </div>
+                <div class="step">
+                    <span class="step-num">04</span>
+                    <div class="step-content"><strong>Loop:</strong> alle 100ms werden die aktuellen werte der rolltorapp (pos, error, motor, limits) an die OPC-UA-variablen geschrieben. umgekehrt empf&auml;ngt der SubHandler &auml;nderungen von aussen und leitet sie an die app weiter.</div>
+                </div>
+            </div>
+            <div class="analogy-box">
+                <strong>Analogie:</strong> stellen sie sich ein haus mit einem telefonanschuss vor. der server ist die zentralleitung, die mit allen zimmern verbunden ist. die 6 variablen sind die schalter in jedem zimmer. Motor_Up und Motor_Down haben eine klingeltaste (schreibbar), w&auml;hrend die anderen nur anzeige-lichter (lesbar) sind.
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 04A OPC UA CLIENT -->
+<section id="s4a">
+    <div class="section-header">
+        <h2>OPC UA Client — Verbindung zum Server</h2>
+        <span class="section-num">04A / FLOWCHART</span>
+    </div>
+    <div class="section-meta">
+        <span class="section-timestamp">Aktualisiert: 27.05.2026</span>
+        <span class="section-version">v0.1</span>
+    </div>
+    <p class="section-intro">der opc-ua-client verbindet sich mit einem externen server (standard: 127.0.0.1:4840), abonniert motor_signale und schreibt position und status. er verbindet sich automatisch neu, wenn die verbindung abbricht.</p>
+
+    <div class="diagram-wrap">
+        <div class="diagram-topbar">
+            <span class="diagram-label label-flow">OPC UA Client — Verbindungsfluss</span>
+            <div class="diagram-dots"><span></span><span></span><span></span></div>
+        </div>
+        <div class="diagram-body">
+            <div class="mermaid">
+flowchart TD
+    A["run_opc_client()"] --> B["config.json laden"]
+    B --> C["url: 127.0.0.1:4840/th-koeln/opcua/"]
+    C --> D{"Verbindung erfolgreich?"}
+    D -- Nein --> E["5 Sekunden warten"]
+    E --> D
+    D -- Ja --> F["Nodes aus config.json lesen"]
+    F --> G["Subscription erstellen (500ms)"]
+    G --> H["subscribe_data_change(Motor_Up, Motor_Down)"]
+
+    subgraph READBACK["Daten zur&uuml;ck schreiben"]
+        I["pos → Position"]
+        J["error → Error"]
+        K["var_up → Motor_Up"]
+        L["var_down → Motor_Down"]
+        M["var_upper_limit → Upper_Limit"]
+        N["var_lower_limit → Lower_Limit"]
+    end
+
+    H --> READBACK
+    READBACK --> O["sleep(0.1)"]
+    O --> READBACK
+
+    style A fill:#1a2a4a,stroke:#185FA5,color:#e8eaf2
+    style B fill:#2d1f3d,stroke:#7c3aed,color:#e8eaf2
+    style D fill:#2e2208,stroke:#854F0B,color:#e8eaf2
+    style READBACK fill:#082e2a,stroke:#0d9488,color:#e8eaf2
+            </div>
+        </div>
+    </div>
+
+    <div class="explanation">
+        <div class="explanation-header">
+            <div class="explanation-icon">◈</div>
+            <span class="explanation-title">Was zeigt dieses Diagramm?</span>
+        </div>
+        <div class="explanation-body">
+            <p class="explanation-lead">der client verbindet sich mit einem externen opc-ua server, abonniert motor-up/down und schreibt position, fehler und endschalter-zust&auml;nde zur&uuml;ck. bei verbindungsverlust wird automatisch neu verbunden.</p>
+            <div class="steps">
+                <div class="step">
+                    <span class="step-num">01</span>
+                    <div class="step-content"><strong>Config laden:</strong> config.json enth&auml;lt die server-url und die node-id-mapping (position, error, motor_up, motor_down, upper_limit, lower_limit). die node-ids werden aus dem json gelesen.</div>
+                </div>
+                <div class="step">
+                    <span class="step-num">02</span>
+                    <div class="step-content"><strong>Wiederholter Connect:</strong> der client l&auml;uft in einer while-loop. bei verbindungsverlust wartet er 5 sekunden und versucht es erneut. das &ouml;ffnet ein asynchrones context-manager-pattern.</div>
+                </div>
+                <div class="step">
+                    <span class="step-num">03</span>
+                    <div class="step-content"><strong>Subscription:</strong> der client abonniert motor_up und motor_down &uuml;ber ein 500ms-intervall. wenn ein server diese werte &auml;ndert, wird ClientSubHandler.datachange_notification aufgerufen.</div>
+                </div>
+                <div class="step">
+                    <span class="step-num">04</span>
+                    <div class="step-content"><strong>Writeback:</strong> alle 100ms werden die aktuellen werte des rolltors (pos, error, motor, limits) an den server zur&uuml;ckgeschrieben. damit steht dem server immer der aktuelle zustand zur verf&uuml;gung.</div>
+                </div>
+            </div>
+            <div class="analogy-box">
+                <strong>Analogie:</strong> so funktioniert ein tablet, das mit einem server-sync-protokoll verbunden ist. sie tippen auf dem tablet (motor steuern), und das tablet zeigt ihnen automatisch den status aller anderen ger&auml;te an. wenn die internetverbindung abbricht, versucht das tablet automatisch, sich wieder zu verbinden.
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 04B BOTH MODE & DUMMY SERVER -->
+<section id="s4b">
+    <div class="section-header">
+        <h2>&bdquo;Both&rdquo; Modus — Dummy Server &amp; Aufgaben-Lebenszyklus</h2>
+        <span class="section-num">04B / FLOWCHART</span>
+    </div>
+    <div class="section-meta">
+        <span class="section-timestamp">Aktualisiert: 27.05.2026</span>
+        <span class="section-version">v0.1</span>
+    </div>
+    <p class="section-intro">im <code>--mode both</code> wird ein <strong>dummy server</strong> gestartet, an den sich der client verbindet. dieser server hat denselben variablen-umbau wie der echte server, aber <strong>alle 6 variablen sind schreibbar</strong> und es gibt <strong>keine subscription</strong>.</p>
+
+    <div class="diagram-wrap">
+        <div class="diagram-topbar">
+            <span class="diagram-label label-flow">Both-Mode — Dummy vs. Echter Server</span>
+            <div class="diagram-dots"><span></span><span></span><span></span></div>
+        </div>
+        <div class="diagram-body">
+            <div class="mermaid">
+flowchart LR
+    subgraph DUMMY["run_dummy_server"]
+        D1[Server erstellt]
+        D2[6 Variablen Position Error Up Down Upper Lower]
+        D3[ALLE Variablen set_writable]
+        D4[Keine Subscription]
+        D5[Infinite Loop sleep 1]
+        D1 --> D2 --> D3 --> D4 --> D5
+    end
+    subgraph REAL["run_opc_server"]
+        R1[Server erstellt]
+        R2[6 Variablen Position Error Up Down Upper Lower]
+        R3[Up-Down set_writable]
+        R4[SubHandler Motor-Up-Down subscription]
+        R5[Loop write 6 vars plus receive updates]
+        R1 --> R2 --> R3 --> R4 --> R5
+    end
+    subgraph CLIENT["Client"]
+        C1[connects to Dummy or Real]
+        C2[writes pos error limits]
+        C1 --> C2
+    end
+
+    DUMMY --> CLIENT
+    REAL --> CLIENT
+
+    style DUMMY fill:#2e2208,stroke:#854F0B
+    style REAL fill:#0d2847,stroke:#185FA5
+    style CLIENT fill:#1a3a2a,stroke:#0d9488
+            </div>
+        </div>
+    </div>
+
+    <div class="diagram-wrap" style="margin-top: 2.5rem;">
+        <div class="diagram-topbar">
+            <span class="diagram-label label-seq">Aufgaben-Lebenszyklus — startup &amp; shutdown</span>
+            <div class="diagram-dots"><span></span><span></span><span></span></div>
+        </div>
+        <div class="diagram-body">
+            <div class="mermaid">
+sequenceDiagram
+    participant S as main.py
+    participant UI as RolltorApp
+    participant T as OPC UA Tasks
+
+    S->>UI: RolltorApp()
+    S->>T: asyncio.create_task(tor.async_mainloop())
+    S->>T: asyncio.create_task(run_opc_server/client/both)
+    S->>T: await task_ui
+
+    Note over S,T: UI-Fenster geschlossen
+    S->>S: _on_closing() → running = False
+    S->>T: task.cancel() f&uuml;r alle Tasks
+    S->>T: try: await task
+    S->>T: except CancelledError: pass
+    S-->>S: Programm beendet
+            </div>
+        </div>
+    </div>
+
+    <div class="explanation">
+        <div class="explanation-header">
+            <div class="explanation-icon">◈</div>
+            <span class="explanation-title">Was zeigt diese Dokumentation?</span>
+        </div>
+        <div class="explanation-body">
+            <p class="explanation-lead">der <code>--mode both</code>-modus ist der hauptmodus f&uuml;r lokale entwickelung. er startet einen eigenen dummy-server und verbindet sich als client damit.</p>
+            <div class="steps">
+                <div class="step">
+                    <span class="step-num">01</span>
+                    <div class="step-content"><strong>Dummy Server:</strong> Startet einen OPC UA Server mit 6 schreibbaren Variablen. Keine Subscription, kein Writeback — er ist nur ein passive Ziel f&uuml;r den Client. 1-Sekunden-Loop ohne Logik.</div>
+                </div>
+                <div class="step">
+                    <span class="step-num">02</span>
+                    <div class="step-content"><strong>Echter Server:</strong> Startet einen OPC UA Server mit 2 schreibbaren und 4 lesbaren Variablen. Er erstellt eine Subcription auf Motor_Up/Motor_Down und schreibt alle 100ms den RolltorApp-Zustand zur&uuml;ck.</div>
+                </div>
+                <div class="step">
+                    <span class="step-num">03</span>
+                    <div class="step-content"><strong>Shutdown-Koordination:</strong> Das UI-Fenster registriert <code>protocol("WM_DELETE_WINDOW", self._on_closing)</code>. Beim Schlie&szlig;en wird <code>running = False</code> gesetzt, der async_mainloop beendet sich, und main.py cancellt alle OPC UA-Tasks &uuml;ber die CancelledError-Exception.</div>
+                </div>
+                <div class="step">
+                    <span class="step-num">04</span>
+                    <div class="step-content"><strong>Startpunkt:</strong> Der Einstieg erfolgt &uuml;ber <code>if __name__ == "__main__":</code> in main.py. Dort wird <code>asyncio.run(main())</code> aufgerufen. <code>_logger.info("Starting Rolltor application...")</code> wird in die Konsole ausgegeben.</div>
+                </div>
+            </div>
+            <div class="analogy-box">
+                <strong>Analogie:</strong> Stellen Sie sich eine Lautsprecheranlage vor. Der Dummy-Server ist ein Geige, mit dem Sie das System testen k&ouml;nnen. Der echte Server ist die eigentliche Musikquelle. Beim Ausschalten der Anlage wird zuerst der Lautst&auml;rkeregler runtergefahren (running=False), bevor der Stecker gezogen wird (task.cancel).
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 03b PER-BUTTON ERROR GATE -->
+<section id="s3b">
+    <div class="section-header">
+        <h2>Motorsteuerung — Pro-Taster-Fehlerabsicherung</h2>
+        <span class="section-num">03B / FLOWCHART</span>
+    </div>
+    <div class="section-meta">
+        <span class="section-timestamp">Aktualisiert: 27.05.2026</span>
+        <span class="section-version">v0.1</span>
+    </div>
+    <p class="section-intro">jede motor-taste hat eine <strong>fehlerabschaltung</strong> (if not self.error). diese verhindert, dass der motor w&auml;hrend eines fehlerzustandes manuell bedient werden kann — eine zus&auml;tzliche sicherheitsebene &uuml;ber die automatische abschaltung in _update_logic hinaus.</p>
+
+    <div class="diagram-wrap">
+        <div class="diagram-topbar">
+            <span class="diagram-label label-flow">Pro-Taster-Fehlerabsicherung</span>
+            <div class="diagram-dots"><span></span><span></span><span></span></div>
+        </div>
+        <div class="diagram-body">
+            <div class="mermaid">
+flowchart TD
+    A["Klick Motor AUF"] --> B{"self.error == False?"}
+    B -- Nein --> C["Taste ignoriert<br/>kein Zustandswechsel"]
+    B -- Ja --> D["var_up togglen"]
+    D --> E["Interlock: var_down = False"]
+    E --> F["_sync_buttons()"]
+    C --> G["Display: !!! FEHLER !!!"]
+
+    style C fill:#2e2008,stroke:#854F0B,color:#e8eaf2
+    style G fill:#2e2008,stroke:#854F0B,color:#e8eaf2
+            </div>
+        </div>
+    </div>
+
+    <div class="code-section">
+        <pre><code>def toggle_motor_up(self):
+    if not self.error:          # Fehlerabschaltung!
+        new_state = not self.var_up.get()
+        self.var_up.set(new_state)
+        if new_state:
+            self.var_down.set(False)  # Interlock
+        self._sync_buttons()
+
+def toggle_motor_down(self):
+    if not self.error:          # Fehlerabschaltung!
+        new_state = not self.var_down.get()
+        self.var_down.set(new_state)
+        if new_state:
+            self.var_up.set(False)    # Interlock
+        self._sync_buttons()</code></pre>
+    </div>
+
+    <div class="explanation">
+        <div class="explanation-header">
+            <div class="explanation-icon">◈</div>
+            <span class="explanation-title">Was zeigt dieses Diagramm?</span>
+        </div>
+        <div class="explanation-body">
+            <p class="explanation-lead">jeder Motor-Taster hat eine zweifache Absicherung: die taster-eigene if-not-self.error-pr&uuml;fung und die zustandsbasierte pr&uuml;fung in _update_logic.</p>
+            <div class="steps">
+                <div class="step">
+                    <span class="step-num">01</span>
+                    <div class="step-content"><strong>Taster-Ebene:</strong> Die toggle_motor_up/down-Methoden pr&uuml;fen self.error. Wenn ein Fehler aktiv ist, wird die Taster-Eingabe ignoriert — kein Zustandswechsel, kein Interlock.</div>
+                </div>
+                <div class="step">
+                    <span class="step-num">02</span>
+                    <div class="step-content"><strong>Logik-Ebene:</strong> _update_logic pr&uuml;ft, ob up UND down gleichzeitig aktiv sind. Wenn ja, wird trigger_error() aufgerufen — das simuliert ein kurzes Schlie&szlig;en bei Motor-Relais.</div>
+                </div>
+                <div class="step">
+                    <span class="step-num">03</span>
+                    <div class="step-content"><strong>Manual-Sensor-Override:</strong> Die Endschalter-Tasten (Limit Oben/Unten) k&ouml;nnen jederzeit gedr&uuml;ckt werden — auch w&auml;hrend eines Fehlers. Sie &uuml;berschreiben die physikalischen Limits an jeder beliebigen Position.</div>
+                </div>
+            </div>
+            <div class="analogy-box">
+                <strong>Analogie:</strong> Wie bei einer echten Rolltor-Steuerung: wenn ein Fehler vorliegt (z.B. &uuml;berfahrene Endlage), lassen sich die Tasten nicht mehr bet&auml;tigen. Man muss zuerst den Not-Aus zur&uuml;cksetzen (RESET-Taste), bevor die Motor-Tasten wieder reagieren.
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 04c SERVER.PY -->
+<section id="s4c">
+    <div class="section-header">
+        <h2>server.py — Minimierter OPC UA Server</h2>
+        <span class="section-num">04C / FLOWCHART</span>
+    </div>
+    <div class="section-meta">
+        <span class="section-timestamp">Aktualisiert: 27.05.2026</span>
+        <span class="section-version">v0.1</span>
+    </div>
+    <p class="section-intro">die <code>server.py</code> in <code>src/basic_opcua_server/</code> ist eine <strong>vereinfachte Version</strong> des OPC UA Servers. Sie verwendet denselben SubHandler-Pattern, aber mit INFO-level logging (statt ERROR in main.py) und ohne die Komplexit&auml;t der main.py-Integration.</p>
+
+    <div class="diagram-wrap">
+        <div class="diagram-topbar">
+            <span class="diagram-label label-flow">main.py vs. server.py — Logging-Level</span>
+            <div class="diagram-dots"><span></span><span></span><span></span></div>
+        </div>
+        <div class="diagram-body">
+            <div class="mermaid">
+flowchart LR
+    subgraph MAIN["main.py application"]
+        M1[ENABLE_LOGGING True]
+        M2[logging.basicConfig level ERROR]
+        M3[Info messages suppressed]
+    end
+    subgraph SERVER["server.py debug"]
+        S1[ENABLE_LOGGING True]
+        S2[logging.basicConfig level INFO]
+        S3[Info messages visible]
+    end
+
+    M1 --> M2 --> M3
+    S1 --> S2 --> S3
+
+    style MAIN fill:#0d2847,stroke:#185FA5
+    style SERVER fill:#2e2208,stroke:#854F0B
+            </div>
+        </div>
+    </div>
+
+    <div class="explanation">
+        <div class="explanation-header">
+            <div class="explanation-icon">◈</div>
+            <span class="explanation-title">Was zeigt dieses Diagramm?</span>
+        </div>
+        <div class="explanation-body">
+            <p class="explanation-lead">server.py ist kein eigenst&auml;ndiges Produkt, sondern ein hilfs-script, das den SubHandler-Pattern demonstriert. es wird nicht von main.py aufgerufen.</p>
+            <div class="steps">
+                <div class="step">
+                    <span class="step-num">01</span>
+                    <div class="step-content"><strong>Identische Struktur:</strong> Server-Erstellung, Namespace-Registrierung, 6 Variablen, SubHandler mit Motor_Up/Down-Subscription — alles identisch zum echten Server in main.py.</div>
+                </div>
+                <div class="step">
+                    <span class="step-num">02</span>
+                    <div class="step-content"><strong>INFO-Logging:</strong> Im Gegensatz zu main.py (ERROR-Level) loggt server.py auf INFO-Level — das bedeutet, dass alle _logger.info()-Aufrufe sichtbar sind. Dies ist konsistent mit dem Entwicklungszweck von server.py.</div>
+                </div>
+                <div class="step">
+                    <span class="step-num">03</span>
+                    <div class="step-content"><strong>Usage:</strong> server.py sollte nicht direkt gestartet werden. Es dient als Referenz/Beispiel f&uuml;r die OPC-UA-Integration. Der &uuml;bliche Einstiegspunkt ist <code>python main.py --mode server</code>.</div>
+                </div>
+            </div>
+            <div class="analogy-box">
+                <strong>Analogie:</strong> Stellen Sie sich server.py als ein Labor-Modell vor, das die Grundfunktionen demonstriert, aber nicht f&uuml;r den produktiven Einsatz gedacht ist. Wie beim echten Produkt wird main.py als Verpackung verwendet, um alles zusammenzuf&uuml;hren.
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 06a KONFIGURATION &amp; HINWEISE -->
+<section id="s6a">
+    <div class="section-header">
+        <h2>Konfiguration — Namespace-Index &amp; Warnhinweise</h2>
+        <span class="section-num">06A / TABLE</span>
+    </div>
+    <div class="section-meta">
+        <span class="section-timestamp">Aktualisiert: 27.05.2026</span>
+        <span class="section-version">v0.1</span>
+    </div>
+    <p class="section-intro">wichtige <strong>Warnhinweise</strong> zur Konfiguration — insbesondere der namespace-index-unterschied zwischen config.json und dem OPC UA Server.</p>
+
+    <div class="diagram-wrap">
+        <div class="diagram-topbar">
+            <span class="diagram-label label-react">Namespace-Index-Konflikt</span>
+            <div class="diagram-dots"><span></span><span></span><span></span></div>
+        </div>
+        <div class="diagram-body">
+            <div class="mermaid">
+flowchart LR
+    A["config.json nodes"] --> B["ns-2-s-Position"]
+    A --> C["ns-2-s-Motor-Up"]
+    A --> D["ns-2-s-Error"]
+    subgraph SERVER["run_opc_server"]
+        S1[register_namespace uri]
+        S2[idx is 1 second namespace]
+        S3[add_variable idx Position]
+    end
+
+    B -.->|Server uses idx-1| E["Variable ns-1-s-Position"]
+    C -.->|Client uses ns-2| F["Node ns-2-s-Motor-Up"]
+    D -.->|Match| G["Pos-or-Err ns-2"]
+
+    style A fill:#2d1f3d,stroke:#7c3aed,color:#e8eaf2
+    style SERVER fill:#0d2847,stroke:#185FA5,color:#e8eaf2
+    style E fill:#2e2008,stroke:#854F0B,color:#e8eaf2
+            </div>
+        </div>
+    </div>
+
+    <div class="table-section">
+        <div class="table-heading">Konfigurations-Warnungen</div>
+        <div class="table-wrap">
+            <table>
+                <thead><tr><th>Problem</th><th>Ursache</th><th>Auswirkung</th><th>L&ouml;sung</th></tr></thead>
+                <tbody>
+                    <tr><td><strong>Namespace-Index</strong></td><td>config.json: ns=2, server: idx=1</td><td>Client kann Knoten nicht finden</td><td>config.json auf ns=1 &auml;ndern oder Server-namespace als ns=2 registrieren</td></tr>
+                    <tr><td><strong>Server-URL</strong></td><td>config.json: 127.0.0.1, fallback: 0.0.0.0</td><td>0.0.0.0: Alle Interfaces, 127.0.0.1: nur localhost</td><td>Falls config.json fehlt, lauscht der Server auf allen Interfaces</td></tr>
+                    <tr><td><strong>Logging-Level</strong></td><td>main.py: ERROR, server.py: INFO</td><td>INFO-Meldungen unterdr&uuml;ckt in main.py</td><td>logging.basicConfig(level=logging.INFO) in main.py f&uuml;r mehr Details</td></tr>
+                    <tr><td><strong>Missing __init__.py</strong></td><td>src/roller_door/ hat kein __init__.py</td><td>Importe m&uuml;ssen &uuml;ber sys.path oder PYTHONPATH laufen</td><td>__init__.py erstellen oder Hauptprogramm im src/-Verzeichnis starten</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<!-- 05 VOLLGRIFF-STEUERUNG -->
+<section id="s5">
+    <div class="section-header">
+        <h2>Vollzugriff-Steuerung — Direkter Programmzugriff</h2>
+        <span class="section-num">05 / SEQUENCE</span>
+    </div>
+    <div class="section-meta">
+        <span class="section-timestamp">Aktualisiert: 27.05.2026</span>
+        <span class="section-version">v0.1</span>
+    </div>
+    <p class="section-intro">die <code>vollzugriff_steuerung</code>-funktion in controller.py demonstriert den direkten programmgesteuerten zugriff auf alle rolltor-variablen. sie simuliert automatisierte testabfolgen und fehlerbehandlung.</p>
+
+    <div class="diagram-wrap">
+        <div class="diagram-topbar">
+            <span class="diagram-label label-seq">Vollzugriff-Steuerung — Demo-Abfolge</span>
+            <div class="diagram-dots"><span></span><span></span><span></span></div>
+        </div>
+        <div class="diagram-body">
+            <div class="mermaid">
+sequenceDiagram
+    participant M as main()
+    participant UI as async_mainloop()
+    participant VS as vollzugriff_steuerung()
+
+    M->>UI: create_task(rolltorapp.async_mainloop)
+    M->>VS: create_task(vollzugriff_steuerung)
+
+    Note over M,VS: Demo 1: Status auslesen
+    VS->>VS: print("Startposition: {tor.pos}%")
+    VS->>VS: print("Endschalter Oben: {tor.var_upper_limit.get()}")
+    VS->>VS: sleep(2)
+
+    Note over M,VS: Demo 2: Motor auf
+    VS->>UI: tor.var_up.set(True)
+    UI->>VS: pos &gt;= 30.0?
+    VS-->>UI: Nein
+    VS-->>UI: Ja
+    VS->>UI: tor.var_up.set(False)
+
+    Note over M,VS: Demo 3: Motor ab
+    VS->>UI: tor.var_down.set(True)
+    UI->>VS: pos &gt;= 15.0?
+    VS-->>UI: Nein
+    VS-->>UI: Ja
+    VS->>UI: tor.var_down.set(False)
+
+    Note over M,VS: Demo 4: Sensor manipulieren
+    VS->>UI: tor.manual_upper_pressed = True
+    VS->>VS: print("Status: {tor.var_upper_limit.get()}")
+    VS->>UI: tor.manual_upper_pressed = False
+
+    Note over M,VS: Demo 5: Fehler provozieren
+    VS->>UI: tor.var_up.set(True)
+    VS->>UI: tor.var_down.set(True)
+    UI->>UI: trigger_error()
+    VS->>UI: tor.trigger_reset()
+
+    Note over M,VS: Demo 6: Obere Endlage
+    VS->>UI: tor.var_up.set(True)
+    loop while not var_upper_limit.get()
+        UI->>VS: pos += speed
+    end
+            </div>
+        </div>
+    </div>
+
+    <div class="code-section">
+        <pre><code>async def vollzugriff_steuerung(tor: RolltorApp):
+    # 1. Status auslesen
+    print(f"Startposition: {tor.pos}%")
+
+    # 2. Motor steuern
+    tor.var_up.set(True)        # Schaltet Motor AUF
+    while tor.pos < 30.0:
+        await asyncio.sleep(0.1)
+    tor.var_up.set(False)       # Stoppt bei 30%
+
+    # 3. Sensoren manipulieren
+    tor.manual_upper_pressed = True  # Täuscht Blockade vor
+    print(f"Status: {tor.var_upper_limit.get()}")
+    tor.manual_upper_pressed = False # Sensor wieder freigeben
+
+    # 4. Fehler provozieren & Reset
+    tor.var_up.set(True)
+    tor.var_down.set(True)     # Auslösend: beides gleichzeitig
+    await asyncio.sleep(0.5)
+    tor.trigger_reset()        # System zurücksetzen</code></pre>
+    </div>
+
+    <div class="explanation">
+        <div class="explanation-header">
+            <div class="explanation-icon">◈</div>
+            <span class="explanation-title">Was zeigt dieses Diagramm?</span>
+        </div>
+        <div class="explanation-body">
+            <p class="explanation-lead">die vollzugriff_steuerung demonstriert, wie programmatisch auf das rolltor zugegriffen werden kann — ohne die gui. das ist n&uuml;tzlich f&uuml; testabfolgen, automatisierung und unit-tests.</p>
+            <div class="steps">
+                <div class="step">
+                    <span class="step-num">01</span>
+                    <div class="step-content"><strong>Lesender Zugriff:</strong> alle zustandsvariablen (pos, error, var_upper_limit, var_lower_limit) k&ouml;nnen direkt ausgelesen werden — das ist die grundlage f&uuml;r testabfragen und loglegik.</div>
+                </div>
+                <div class="step">
+                    <span class="step-num">02</span>
+                    <div class="step-content"><strong>Schreibender Zugriff:</strong> var_up und var_down k&ouml;nnen programmatisch gesetzt werden — das simuliert eine externe steuerung &uuml;ber OPC UA. die while-loops warten auf positionsschwellen.</div>
+                </div>
+                <div class="step">
+                    <span class="step-num">03</span>
+                    <div class="step-content"><strong>Sensor-Manipulation:</strong> manual_upper_pressed kann direkt aus dem code gesetzt werden — das simuliert einen physischen endschalter ohne ihn tats&auml;chlich auszul&ouml;sen.</div>
+                </div>
+                <div class="step">
+                    <span class="step-num">04</span>
+                    <div class="step-content"><strong>Fehler &amp; Reset:</strong> durch gleichzeitiges setzen von var_up und var_down wird der fehler zustand ausgel&ouml;st. trigger_reset() setzt alles auf urprungszustand zur&uuml;ck.</div>
+                </div>
+            </div>
+            <div class="analogy-box">
+                <strong>Analogie:</strong> stellen sie sich einen ingenieur vor, der mit einem terminal direkt auf eine maschine zugreift — ohne das bildschirm zu sehen. er kann schalter dr&uuml;cken, sensoren simulieren und fehler provozieren — komplett ohne grafik. das ist genau das, was vollzugriff_steuerung tut.
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 06 KONFIGURATION -->
+<section id="s6">
+    <div class="section-header">
+        <h2>Konfiguration — config.json</h2>
+        <span class="section-num">06 / FLOWCHART</span>
+    </div>
+    <div class="section-meta">
+        <span class="section-timestamp">Aktualisiert: 27.05.2026</span>
+        <span class="section-version">v0.1</span>
+    </div>
+    <p class="section-intro">die <code>config.json</code> datei enth&auml;lt die server-url und das node-id-mapping, das der OPC UA Client zum identifizieren der einzelnen variablen ben&ouml;tigt.</p>
+
+    <div class="diagram-wrap">
+        <div class="diagram-topbar">
+            <span class="diagram-label label-react">config.json — Struktur</span>
+            <div class="diagram-dots"><span></span><span></span><span></span></div>
+        </div>
+        <div class="diagram-body">
+            <div class="mermaid">
+flowchart LR
+    A["config.json"] --> B["server_url\nopc.tcp://127.0.0.1:4840/th-koeln/opcua/"]
+    A --> C["nodes\nPosition: ns=2;s=Position"]
+    A --> D["nodes\nError: ns=2;s=Error"]
+    A --> E["nodes\nMotor_Up: ns=2;s=Motor_Up"]
+    A --> F["nodes\nMotor_Down: ns=2;s=Motor_Down"]
+    A --> G["nodes\nUpper_Limit: ns=2;s=Upper_Limit"]
+    A --> H["nodes\nLower_Limit: ns=2;s=Lower_Limit"]
+
+    style A fill:#2d1f3d,stroke:#7c3aed,color:#e8eaf2
+    style B fill:#0d2847,stroke:#185FA5,color:#e8eaf2
+    style C fill:#082e2a,stroke:#0d9488,color:#e8eaf2
+    style D fill:#2e2208,stroke:#854F0B,color:#e8eaf2
+    style E fill:#2e2208,stroke:#854F0B,color:#e8eaf2
+    style F fill:#2e2208,stroke:#854F0B,color:#e8eaf2
+    style G fill:#082e2a,stroke:#0d9488,color:#e8eaf2
+    style H fill:#082e2a,stroke:#0d9488,color:#e8eaf2
+            </div>
+        </div>
+    </div>
+
+    <div class="code-section">
+        <pre><code>{
+  "server_url": "opc.tcp://127.0.0.1:4840/th-koeln/opcua/",
+  "nodes": {
+    "Position": "ns=2;s=Position",
+    "Error": "ns=2;s=Error",
+    "Motor_Up": "ns=2;s=Motor_Up",
+    "Motor_Down": "ns=2;s=Motor_Down",
+    "Upper_Limit": "ns=2;s=Upper_Limit",
+    "Lower_Limit": "ns=2;s=Lower_Limit"
+  }
+}</code></pre>
+    </div>
+
+    <div class="explanation">
+        <div class="explanation-header">
+            <div class="explanation-icon">◈</div>
+            <span class="explanation-title">Was zeigt dieses Diagramm?</span>
+        </div>
+        <div class="explanation-body">
+            <p class="explanation-lead">config.json ist die einzige konfigurdatei des projekts. sie enth&auml;lt die server-adresse und das mapping von python-variablennamen zu opc-ua-node-ids.</p>
+            <div class="steps">
+                <div class="step">
+                    <span class="step-num">01</span>
+                    <div class="step-content"><strong>server_url:</strong> die standard-connection-string des opc-ua-servers. beim starten des clients wird diese url gelesen, um eine verbindung zum server aufzubauen.</div>
+                </div>
+                <div class="step">
+                    <span class="step-num">02</span>
+                    <div class="step-content"><strong>node mapping:</strong> jedes feld mappt einen python-variablennamen (z.B. "Motor_Up") zu einer opc-ua-node-id im format <code>ns=N;s=Name</code>. ns=2 bedeutet namespace-index 2.</div>
+                </div>
+                <div class="step">
+                    <span class="step-num">03</span>
+                    <div class="step-content"><strong>client nutzt config:</strong> im run_opc_client() wird config.json geladen, die server_url wird f&uuml;r die verbindung verwendet und die nodes werden f&uuml;r die subscription und writeback.</div>
+                </div>
+                <div class="step">
+                    <span class="step-num">04</span>
+                    <div class="step-content"><strong>error handling:</strong> wenn config.json nicht geladen werden kann, wird der fehler geloggt und die funktion kehrt fr&uuml;hzeitig zur&uuml;ck — der client wird nicht gestartet.</div>
+                </div>
+            </div>
+            <div class="analogy-box">
+                <strong>Analogie:</strong> config.json ist wie ein adressbuch. ohne die adresse (server_url) wissen sie nicht, wohin sie m&uuml;ssen. ohne die grundst&uuml;cksnummern (node-ids) wissen sie nicht, wo genau sie klopfen m&uuml;ssen.
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 07 FEHLERBEHANDLUNG -->
+<section id="s7">
+    <div class="section-header">
+        <h2>Fehlerbehandlung — Was passiert wenn etwas schief l&auml;uft?</h2>
+        <span class="section-num">07 / FLOWCHART</span>
+    </div>
+    <div class="section-meta">
+        <span class="section-timestamp">Aktualisiert: 27.05.2026</span>
+        <span class="section-version">v0.1</span>
+    </div>
+    <p class="section-intro">das rolltor-system hat mehrere fehlerbehandlungsmechanismen: die &uuml;berfahrts-absicherung im UI, der verbindungswiederherstellungs im client und das logging im server.</p>
+
+    <div class="diagram-wrap">
+        <div class="diagram-topbar">
+            <span class="diagram-label label-flow">Fehlerbehandlung — Entscheidungsbaum</span>
+            <div class="diagram-dots"><span></span><span></span><span></span></div>
+        </div>
+        <div class="diagram-body">
+            <div class="mermaid">
+flowchart TD
+    A["Fehler tritt auf"] --> B{"Art des Fehlers?"}
+
+    B -- "Motor AUF + AB" --> C["trigger_error()"]
+    C --> D["error = True"]
+    D --> E["Motor abschalten"]
+    E --> F["Display: !!! FEHLER !!!"]
+    F --> G["Manual-Reset erforderlich"]
+
+    B -- "Pos &rarr; 102%" --> C
+
+    B -- "Pos &larr; -2%" --> C
+
+    B -- "OPC UA Disconnect" --> H["Client Error/Disconnect"]
+    H --> I["5 Sekunden warten"]
+    I --> J["Neu verbinden"]
+
+    B -- "Config nicht gefunden" --> K["Configuration Error loggen"]
+    K --> L["Funktion kehrt fr&uuml;hzeitig zur&uuml;ck"]
+
+    G --> M["trigger_reset()"]
+    M --> N["error = False"]
+    N --> O["Motor = False"]
+    O --> P["Pos auf 0&#45;100 begrenzen"]
+    P --> Q["System bereit"]
+
+    style A fill:#2e2208,stroke:#854F0B,color:#e8eaf2
+    style B fill:#2e1f08,stroke:#854F0B,color:#e8eaf2
+    style C fill:#2e2008,stroke:#854F0B,color:#e8eaf2
+    style D fill:#1a2a4a,stroke:#185FA5,color:#e8eaf2
+    style E fill:#1a2a4a,stroke:#185FA5,color:#e8eaf2
+    style F fill:#1a2a4a,stroke:#185FA5,color:#e8eaf2
+    style G fill:#1a2a4a,stroke:#185FA5,color:#e8eaf2
+    style H fill:#0d2847,stroke:#185FA5,color:#e8eaf2
+    style I fill:#0d2847,stroke:#185FA5,color:#e8eaf2
+    style J fill:#1a3a2a,stroke:#0d9488,color:#e8eaf2
+    style K fill:#0d2847,stroke:#185FA5,color:#e8eaf2
+    style L fill:#0d2847,stroke:#185FA5,color:#e8eaf2
+    style M fill:#1a2a4a,stroke:#185FA5,color:#e8eaf2
+    style N fill:#1a2a4a,stroke:#185FA5,color:#e8eaf2
+    style O fill:#1a2a4a,stroke:#185FA5,color:#e8eaf2
+    style P fill:#1a2a4a,stroke:#185FA5,color:#e8eaf2
+    style Q fill:#1a3a2a,stroke:#0d9488,color:#e8eaf2
+            </div>
+        </div>
+    </div>
+
+    <div class="table-section">
+        <div class="table-heading">Fehler-Szenarien im &U;berblick</div>
+        <div class="table-wrap">
+            <table>
+                <thead><tr><th>Szenario</th><th>Ursache</th><th>Wirkung</th><th>Behebung</th></tr></thead>
+                <tbody>
+                    <tr><td><strong>Doppel-Steuerung</strong></td><td>Motor AUF + AB gleichzeitig</td><td>sofortiger fehlerzustand</td><td>Manual-Reset &uuml;ber RESET-Knopf</td></tr>
+                    <tr><td><strong>&U;berfahrt</strong></td><td>Motor l&auml;uft &uuml;ber 102% oder unter -2%</td><td>mechanischer fehler</td><td>Manual-Reset &uuml;ber RESET-Knopf</td></tr>
+                    <tr><td><strong>OPC UA Disconnect</strong></td><td>Server unerreichbar / netzwerkfehler</td><td>Client verliert verbindung</td><td>Automatische neuverbindung nach 5s</td></tr>
+                    <tr><td><strong>Config Error</strong></td><td>config.json fehlt oder korrupt</td><td>Client startet nicht</td><td>config.json &uuml;berpr&uuml;fen / wiederherstellen</td></tr>
+                    <tr><td><strong>Kein Hintergrundbild</strong></td><td>assets/images/kyrgyzstan-info.jpg fehlt</td><td>Dunkler Hintergrund im Canvas</td><td>Bild in korrektem pfad bereitstellen</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="explanation">
+        <div class="explanation-header">
+            <div class="explanation-icon">◈</div>
+            <span class="explanation-title">Was zeigt dieses Diagramm?</span>
+        </div>
+        <div class="explanation-body">
+            <p class="explanation-lead">das system unterscheidet drei hauptfehlerkategorien: UI-fehler (doppel-steuerung, &uuml;berfahrt), netzwerkfehler (opc ua disconnect) und konfigurationsfehler (missing config). jeder fehler hat einen klaren behandlungsfluss.</p>
+            <div class="steps">
+                <div class="step">
+                    <span class="step-num">01</span>
+                    <div class="step-content"><strong>UI-Fehler:</strong> doppelt-steuerung und &uuml;berfahrt f&uuml;hren zu einem fehlerzustand, der motor abschaltet und eine fehlermeldung anzeigt. ein manueller reset ist erforderlich — das simuliert den echten sicherheitsmechanismus einer rollobert&uuml;r.</div>
+                </div>
+                <div class="step">
+                    <span class="step-num">02</span>
+                    <div class="step-content"><strong>Netzwerkfehler:</strong> bei einem verbindungabbruch wartet der client 5 sekunden und versucht dann, sich automatisch neu zu verbinden. dieser prozess wiederholt sich so lange, bis die verbindung wiederhergestellt ist.</div>
+                </div>
+                <div class="step">
+                    <span class="step-num">03</span>
+                    <div class="step-content"><strong>Konfigurationsfehler:</strong> wenn config.json nicht gelesen werden kann, wird der fehler geloggt und der client wird nicht gestartet. das verhindert silent failures beim programmstart.</div>
+                </div>
+                <div class="step">
+                    <span class="step-num">04</span>
+                    <div class="step-content"><strong>Logging:</strong> alle fehler und zustands&auml;nderungen werden &uuml;ber das logging-modul ausgegeben. ENABLE_LOGGING kann auf false gesetzt werden, um das logging vollst&auml;ndig zu deaktivieren.</div>
+                </div>
+            </div>
+            <div class="analogy-box">
+                <strong>Analogie:</strong> wie bei einer echten rollobert&uuml;r — wenn sie das tor &uuml;ber das ende hinaus fahren lassen, schaltet der motor ab und es bleibt eine taste zum zur&uuml;cksetzen. das ist absichtlich: sie m&uuml;ssen sicherstellen, dass der fehler wirklich behoben ist, bevor sie wieder starten.
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 08 ABH&Auml;NGIGKEITEN -->
+<section id="s8">
+    <div class="section-header">
+        <h2>Abh&auml;ngigkeiten &amp; Laufzeitumgebung</h2>
+        <span class="section-num">08 / TABLE</span>
+    </div>
+    <div class="section-meta">
+        <span class="section-timestamp">Aktualisiert: 27.05.2026</span>
+        <span class="section-version">v0.1</span>
+    </div>
+    <p class="section-intro">das projekt verwendet python 3.13+ und drei hauptabhängigkeiten: asyncua f&uuml;r opc ua kommunikation, customtkinter f&uuml;r die gui und pillow f&uuml;r bildverarbeitung.</p>
+
+    <div class="diagram-wrap">
+        <div class="diagram-topbar">
+            <span class="diagram-label label-react">pyproject.toml — Dependencies</span>
+            <div class="diagram-dots"><span></span><span></span><span></span></div>
+        </div>
+        <div class="diagram-body">
+            <div class="mermaid">
+flowchart LR
+    A["pyproject.toml"] --> B["asyncua >= 1.2b2\nOPC UA Client/Server Library"]
+    A --> C["customtkinter\nCustom Tkinter GUI Framework"]
+    A --> D["Pillow\nPython Imaging Library"]
+
+    B --> E["async + SSL + Cryptography"]
+    C --> F["tk + ttk themes"]
+    D --> G["image load, resize, thumbnail"]
+
+    style A fill:#2d1f3d,stroke:#7c3aed,color:#e8eaf2
+    style B fill:#0d2847,stroke:#185FA5,color:#e8eaf2
+    style C fill:#082e2a,stroke:#0d9488,color:#e8eaf2
+    style D fill:#2e2208,stroke:#854F0B,color:#e8eaf2
+            </div>
+        </div>
+    </div>
+
+    <div class="table-section">
+        <div class="table-heading">Projektstruktur</div>
+        <div class="table-wrap">
+            <table>
+                <thead><tr><th>Pfad</th><th>Beschreibung</th><th>Hauptfunktion</th></tr></thead>
+                <tbody>
+                    <tr><td><code>main.py</code></td><td>Einsteigepunkt</td><td>Startet UI + OPC UA Server/Client (Modus w&auml;hlbar)</td></tr>
+                    <tr><td><code>src/roller_door/roller_door.py</code></td><td>UI-Anwendung</td><td>RolltorApp mit Canvas-Rendering und Motorsteuerung</td></tr>
+                    <tr><td><code>src/roller_door/controller.py</code></td><td>Demo-Steuerung</td><td>Vollzugriff-Steuerung f&uuml;r test und automation</td></tr>
+                    <tr><td><code>src/basic_opcua_server/server.py</code></td><td>OPC UA Server</td><td>Minimierter OPC UA Server mit Variablen-Hierarchie</td></tr>
+                    <tr><td><code>config.json</code></td><td>Konfiguration</td><td>Server-URL und Node-ID-Mapping</td></tr>
+                    <tr><td><code>pyproject.toml</code></td><td>Build-Konfiguration</td><td>Setuptools-Buildsystem mit Dependencies</td></tr>
+                    <tr><td><code>assets/images/kyrgyzstan-info.jpg</code></td><td>Hintergrundbild</td><td>Canvas-Hintergrund der UI</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="code-section">
+        <pre><code># Installation
+pip install -e .
+
+# Start-Modi
+python main.py --mode server      # Nur OPC UA Server
+python main.py --mode client      # Nur OPC UA Client
+python main.py --mode both        # Server + Client
+
+# Einzeln starten
+python src/basic_opcua_server/server.py  # Server nur (nicht empfohlen)
+python src/roller_door/roller_door.py     # UI nur (nicht empfohlen)</code></pre>
+    </div>
+
+    <div class="explanation">
+        <div class="explanation-header">
+            <div class="explanation-icon">◈</div>
+            <span class="explanation-title">Was zeigt dieses Diagramm?</span>
+        </div>
+        <div class="explanation-body">
+            <p class="explanation-lead">das projekt hat nur drei hauptabhängigkeiten und eine einfache struktur. die installations- und startbefehle sind minimal.</p>
+            <div class="steps">
+                <div class="step">
+                    <span class="step-num">01</span>
+                    <div class="step-content"><strong>asyncua:</strong> die OPC UA-Bibliothek. Sie implementiert das OPC UA-Protokoll mit Python-Async. sie verarbeitet die server- und client-kommunikation, node-hierarchien und subscriptions.</div>
+                </div>
+                <div class="step">
+                    <span class="step-num">02</span>
+                    <div class="step-content"><strong>customtkinter:</strong> ein modernes GUI-Framework, das auf tkinter aufbaut. es bietet dunkle design-standards und rundete button – die im projekt verwendet werden.</div>
+                </div>
+                <div class="step">
+                    <span class="step-num">03</span>
+                    <div class="step-content"><strong>Pillow:</strong> die Python Imaging Library. sie wird verwendet, um das hintergrundbild aus assets/images/kyrgyzstan-info.jpg zu laden, auf canvas-gr&ouml;sse zu beschneiden und auf dem canvas zu rendern.</div>
+                </div>
+                <div class="step">
+                    <span class="step-num">04</span>
+                    <div class="step-content"><strong>Start-Modi:</strong> der hauptmodus wird &uuml;ber den --mode parameter bestimmt. "both" startet einen eigenem server und verbindet sich dann als client damit. das ist f&uuml;r lokale tests am nutzlichsten.</div>
+                </div>
+            </div>
+            <div class="analogy-box">
+                <strong>Analogie:</strong> Stellen Sie sich ein fahrrad vor. asyncua ist das getriebe (das das feedback zwischen motor und rolltor &uuml;bertr&auml;gt), customtkinter ist der rahmen (die sichtbare struktur) und pillow ist der spiegel (das hintergrundbild). ohne eines davon f&auml;hrt das fahrrad nicht.
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 09 GLOSSAR -->
+<section id="s9">
+    <div class="section-header">
+        <h2>Glossar — Begriffs&uuml;bersicht</h2>
+        <span class="section-num">09 / TABLE</span>
+    </div>
+    <div class="section-meta">
+        <span class="section-timestamp">Aktualisiert: 27.05.2026</span>
+        <span class="section-version">v0.1</span>
+    </div>
+    <p class="section-intro">wichtige begriffe und abk&uuml;rzungen im zusammenhang mit diesem projekt.</p>
+
+    <div class="glossary-grid">
+        <div class="glossary-item">
+            <div class="glossary-term"><code>OPC UA</code> <span class="g-tag g-tag-infra">Infrastruktur</span></div>
+            <div class="glossary-def">Open Platform Communications Unified Architecture. Ein industrielles Kommunikationsprotokoll f&uuml; Machine-to-Machine-Kommunikation. Verwendet ein objekt-basiertes datenmodell mit namespaces, nodes und variablen.</div>
+        </div>
+        <div class="glossary-item">
+            <div class="glossary-term"><code>asyncua</code> <span class="g-tag g-tag-data">Bibliothek</span></div>
+            <div class="glossary-def">Eine Python-Bibliothek f&uuml;r OPC UA Client/Server-Kommunikation mit asyncio-Unterstützung. Ermöglicht asynchrone server-erstellung, node-hierarchien, subscriptions und data-change notifications.</div>
+        </div>
+        <div class="glossary-item">
+            <div class="glossary-term"><code>CustomTkinter</code> <span class="g-tag g-tag-data">Bibliothek</span></div>
+            <div class="glossary-def">Ein Python GUI-Framework basierend auf Tkinter mit modernen designs, dark-mode support und rundete widgets. wird für die rolltor-UI verwendet.</div>
+        </div>
+        <div class="glossary-item">
+            <div class="glossary-term"><code>BooleanVar</code> <span class="g-tag g-tag-algo">Algorithmus</span></div>
+            <div class="glossary-def">Ein tkinter-Variable-Typ f&uuml; boolesche werte. wird verwendet, um den zustand von motor-up, motor-down und endschaltern mit reactive updates in der UI zu verfolgen.</div>
+        </div>
+        <div class="glossary-item">
+            <div class="glossary-term"><code>Subscription</code> <span class="g-tag g-tag-infra">Infrastruktur</span></div>
+            <div class="glossary-def">Ein OPC UA-Mechanismus, bei dem ein client oder server auf &auml;nderungen bestimmter variablen wartet. bei einer &auml;nderung wird ein callback aufgerufen.</div>
+        </div>
+        <div class="glossary-item">
+            <div class="glossary-term"><code>Node ID</code> <span class="g-tag g-tag-format">Format</span></div>
+            <div class="glossary-def">Die eindeutige identifizierung einer opc ua-variable. Format: <code>ns=N;s=Name</code> (namespace index und string identifier) oder <code>ns=N;i=N</code> (numeric identifier).</div>
+        </div>
+        <div class="glossary-item">
+            <div class="glossary-term"><code>Latching</code> <span class="g-tag g-tag-algo">Algorithmus</span></div>
+            <div class="glossary-def">Ein steuerungsprinzip bei dem ein taster ein und aus schaltet. beim ersten druck wird das signal aktiviert, beim zweiten druck wird es deaktiviert.</div>
+        </div>
+        <div class="glossary-item">
+            <div class="glossary-term"><code>Trägheit</code> <span class="g-tag g-tag-algo">Algorithmus</span></div>
+            <div class="glossary-def">Die physische eigenschaft, dass sich ein objekt nicht instantan beschleunigen kann. im rolltor-simulator wird sie durch schrittweise geschwindigkeits&auml;nderungen simuliert.</div>
+        </div>
+    </div>
+</section>
+
+</main>
+
+<footer>
+    <div class="footer-inner">
+        <div class="footer-logo">Rolltor OPC UA</div>
+        <p>OPC UA Simulationssystem — TH K&ouml;ln · Fakult&auml;t f&uuml;r Informatik und Elektrotechnik</p>
+        <p>Dokumentation generiert 27.05.2026 · Version 0.1</p>
+    </div>
+</footer>
+
+<script>
+        // Theme-Management
+        const getStoredTheme = () => localStorage.getItem('repo-dashboard-theme') || 'dark';
+        const applyPageTheme = (theme) => {
+            document.body.classList.remove('light-mode', 'colorful-mode');
+            if (theme === 'light') {
+                document.body.classList.add('light-mode');
+            } else if (theme === 'colorful') {
+                document.body.classList.add('colorful-mode');
+            }
+            const label = document.getElementById('themeToggleText');
+            const pill = document.getElementById('themeTogglePill');
+            const labels = {
+                'dark': ['Light Modus', 'Dark'],
+                'colorful': ['Colorful Modus', 'Colorful'],
+                'light': ['Dark Modus', 'Light']
+            };
+            if (label) label.textContent = labels[theme][0];
+            if (pill) pill.textContent = labels[theme][1];
+        };
+        applyPageTheme(getStoredTheme());
+
+        // Mermaid-Initialisierung
+        const mermaidTheme = getStoredTheme() === 'light' ? 'base' : 'dark';
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: mermaidTheme,
+            themeVariables: getStoredTheme() === 'light' ? {
+                primaryColor: '#ffffff', primaryTextColor: '#0f172a', primaryBorderColor: '#94a3b8',
+                lineColor: '#0369a1', secondaryColor: '#f8fafc', tertiaryColor: '#eef6ff',
+                fontFamily: '"DM Sans", system-ui, sans-serif', fontSize: '14px',
+                edgeLabelBackground: '#ffffff', clusterBkg: '#f8fafc', clusterBorder: '#94a3b8',
+                titleColor: '#0f172a', actorBkg: '#ffffff', actorBorder: '#0284c7',
+                actorTextColor: '#0f172a', actorLineColor: '#94a3b8', signalColor: '#334155',
+                signalTextColor: '#0f172a', labelBoxBkgColor: '#ffffff', labelBoxBorderColor: '#94a3b8',
+                labelTextColor: '#0f172a', loopTextColor: '#475569', noteBorderColor: '#0284c7',
+                noteBkgColor: '#eff6ff', noteTextColor: '#0f172a', activationBorderColor: '#0284c7',
+                activationBkgColor: '#dbeafe', git0: '#0284c7', git1: '#7c3aed',
+                git2: '#059669', git3: '#d97706', git4: '#be123c'
+            } : (getStoredTheme() === 'colorful' ? {
+                primaryColor: '#1e293b', primaryTextColor: '#f1f5f9', primaryBorderColor: '#475569',
+                lineColor: '#2dd4bf', secondaryColor: '#0f172a', tertiaryColor: '#1e293b',
+                fontFamily: '"DM Sans", system-ui, sans-serif', fontSize: '14px',
+                edgeLabelBackground: '#0f172a', clusterBkg: '#1e293b', clusterBorder: '#334155',
+                titleColor: '#f1f5f9', actorBkg: '#1e293b', actorBorder: '#7dd3fc',
+                actorTextColor: '#f1f5f9', actorLineColor: '#475569', signalColor: '#cbd5e1',
+                signalTextColor: '#f1f5f9', labelBoxBkgColor: '#334155', labelBoxBorderColor: '#475569',
+                labelTextColor: '#f1f5f9', loopTextColor: '#cbd5e1', noteBorderColor: '#7dd3fc',
+                noteBkgColor: '#0c4a6e', noteTextColor: '#f1f5f9', activationBorderColor: '#7dd3fc',
+                activationBkgColor: '#0c4a6e', git0: '#7dd3fc', git1: '#a78bfa',
+                git2: '#34d399', git3: '#fbbf24', git4: '#fb7185'
+            } : {
+                primaryColor: '#172033', primaryTextColor: '#e8eaf2', primaryBorderColor: '#41516b',
+                lineColor: '#2dd4bf', secondaryColor: '#111827', tertiaryColor: '#1d293b',
+                fontFamily: '"DM Sans", system-ui, sans-serif', fontSize: '14px',
+                edgeLabelBackground: '#0b0f17', clusterBkg: '#111827', clusterBorder: '#334155',
+                titleColor: '#e8eaf2', actorBkg: '#172033', actorBorder: '#7dd3fc',
+                actorTextColor: '#e8eaf2', actorLineColor: '#334155', signalColor: '#94a3b8',
+                signalTextColor: '#e8eaf2', labelBoxBkgColor: '#1d293b', labelBoxBorderColor: '#334155',
+                labelTextColor: '#e8eaf2', loopTextColor: '#94a3b8', noteBorderColor: '#7dd3fc',
+                noteBkgColor: '#102235', noteTextColor: '#e8eaf2', activationBorderColor: '#7dd3fc',
+                activationBkgColor: '#102235', git0: '#7dd3fc', git1: '#a78bfa',
+                git2: '#34d399', git3: '#fbbf24', git4: '#fb7185'
+            }),
+            flowchart: { curve: 'basis', padding: 28, useMaxWidth: true, htmlLabels: true },
+            sequence: { diagramPadding: 12, actorMargin: 90, messageMargin: 50, useMaxWidth: true },
+            classDiagram: { useMaxWidth: true },
+            gitgraph: { showBranchs: true, rotateCommitLabel: false, parallelPaths: false, commitPadding: 32, useMaxWidth: true }
+        });
+
+        // IntersectionObserver f&uuml;r Scroll-Animationen
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.05, rootMargin: '0px 0px -60px 0px' });
+        document.querySelectorAll('section').forEach(s => observer.observe(s));
+
+        // Active-Link-Tracking f&uuml;r Navigation
+        const sections = document.querySelectorAll('section');
+        const navLinks = document.querySelectorAll('nav#navbar a');
+        const navObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const id = entry.target.getAttribute('id');
+                    navLinks.forEach(link => {
+                        link.classList.toggle('active', link.getAttribute('href') === '#' + id);
+                    });
+                }
+            });
+        }, { threshold: 0.3 });
+        sections.forEach(s => navObserver.observe(s));
+
+        // Smooth Scroll f&uuml;r Navigation-Links
+        navLinks.forEach(link => {
+            link.addEventListener('click', e => {
+                e.preventDefault();
+                const target = document.querySelector(link.getAttribute('href'));
+                if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+        });
+
+        // Theme-Toggle
+        const themeToggle = document.getElementById('themeToggle');
+        if (themeToggle) {
+            themeToggle.addEventListener('click', () => {
+                const current = getStoredTheme();
+                let nextTheme;
+                if (current === 'dark') {
+                    nextTheme = 'colorful';
+                } else if (current === 'colorful') {
+                    nextTheme = 'light';
+                } else {
+                    nextTheme = 'dark';
+                }
+                localStorage.setItem('repo-dashboard-theme', nextTheme);
+                location.reload();
+            });
+        }
+    </script>
+</body>
+</html>
